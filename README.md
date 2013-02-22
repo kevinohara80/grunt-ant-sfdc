@@ -2,6 +2,8 @@
 
 > Add salesforce and force.com ANT tasks to your grunt builds
 
+Note: This currently only supports deploys. More Ant tasks coming!
+
 ## Getting Started
 This plugin requires Grunt `~0.4.0`
 
@@ -17,14 +19,14 @@ One the plugin has been installed, it may be enabled inside your Gruntfile with 
 grunt.loadNpmTasks('grunt-ant-sfdc');
 ```
 
-## The "ant_sfdc" task
+## The "antdeploy" task
 
 ### Overview
-In your project's Gruntfile, add a section named `ant_sfdc` to the data object passed into `grunt.initConfig()`.
+In your project's Gruntfile, add a section named `antdeploy` to the data object passed into `grunt.initConfig()`.
 
 ```js
 grunt.initConfig({
-  ant_sfdc: {
+  antdeploy: {
     options: {
       // Task-specific options go here.
     },
@@ -56,7 +58,7 @@ In this example, we will deploy all static resources to a single org
 
 ```js
 grunt.initConfig({
-  ant_sfdc: {
+  antdeploy: {
     options: {},
     // specify one deploy target
     dev1: {
@@ -71,13 +73,16 @@ grunt.initConfig({
 })
 ```
 
-#### Multiple Org Deploy
+#### Multiple Org Deploy w/ Default Options
 In this example, we specify two different org deploy targets with different metadata for each
 
 ```js
 grunt.initConfig({
-  ant_sfdc: {
-    options: {},
+  antdeploy: {
+    options: {
+      root: 'my/metadata/', // note trailing slash is important
+      version: '27.0'
+    },
     // specify one deploy target
     dev1: {
       user:  'myusername1@gmail.com',
@@ -93,7 +98,7 @@ grunt.initConfig({
       token: 'myauthtoken',
       pkg: {
         staticresource: ['resource1', 'resource2'],
-        apexclass: ['class1', 'class2']
+        apexclass:      ['class1', 'class2']
       }
     }
   }
