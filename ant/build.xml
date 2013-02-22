@@ -1,0 +1,12 @@
+<project name="Grunt Salesforce Ant Deploy" default="deploy" xmlns:sf="antlib:com.salesforce">
+
+  <property environment="env"/>
+
+  <target name="deploy">
+    <!-- Upload the contents of the zip -->
+    <sf:deploy username="${SFUSER}" password="${SFPASS}" 
+      serverurl="${SERVERURL}" deployroot="${ROOT}">
+    </sf:deploy>
+  </target>
+
+</project>

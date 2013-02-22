@@ -1,0 +1,307 @@
+{
+  "criteriabasedrules": {
+    "xmlType": "criteriaBasedRules",
+    "folder": "opportunitySharingRules",
+    "allowStar": true
+  },
+  "ownerrules": {
+    "xmlType": "ownerRules",
+    "folder": "opportunitySharingRules",
+    "allowStar": true
+  },
+  "actionoverride": {
+    "xmlType": "ActionOverride",
+    "folder": "objects",
+    "allowStar": false
+  },
+  "rules": {
+    "xmlType": "rules",
+    "folder": "accountTerritorySharingRules",
+    "allowStar": true
+  },
+  "settings": {
+    "xmlType": "Settings",
+    "folder": "settings",
+    "allowStar": true
+  },
+  "analyticsnapshot": {
+    "xmlType": "AnalyticSnapshot",
+    "folder": "analyticsnapshots",
+    "allowStar": false
+  },
+  "apexclass": {
+    "xmlType": "ApexClass",
+    "folder": "classes",
+    "allowStar": true
+  },
+  "articletype": {
+    "xmlType": "ArticleType",
+    "folder": "objects",
+    "allowStar": true
+  },
+  "apextrigger": {
+    "xmlType": "ApexTrigger",
+    "folder": "triggers",
+    "allowStar": true
+  },
+  "assignmentrules": {
+    "xmlType": "AssignmentRules",
+    "folder": "assignmentRules",
+    "allowStar": true
+  },
+  "authprovider": {
+    "xmlType": "AuthProvider",
+    "folder": "authproviders",
+    "allowStar": false
+  },
+  "autoresponserules": {
+    "xmlType": "AutoResponseRules",
+    "folder": "autoResponseRules",
+    "allowStar": true
+  },
+  "businessprocess": {
+    "xmlType": "BusinessProcess",
+    "folder": "objects",
+    "allowStar": false
+  },
+  "callcenter": {
+    "xmlType": "CallCenter",
+    "folder": "callCenters",
+    "allowStar": true
+  },
+  "community": {
+    "xmlType": "Community",
+    "folder": "communities",
+    "allowStar": true
+  },
+  "customapplication": {
+    "xmlType": "CustomApplication",
+    "folder": "applications",
+    "allowStar": true
+  },
+  "customfield": {
+    "xmlType": "CustomField",
+    "folder": "objects",
+    "allowStar": false
+  },
+  "customlabels": {
+    "xmlType": "CustomLabels",
+    "folder": "labels",
+    "allowStar": true
+  },
+  "customobject": {
+    "xmlType": "CustomObject",
+    "folder": "objects",
+    "allowStar": true
+  },
+  "customobjecttranslation": {
+    "xmlType": "CustomObjectTranslation",
+    "folder": "objectTranslations",
+    "allowStar": true
+  },
+  "custompageweblink": {
+    "xmlType": "CustomPageWebLink",
+    "folder": "weblinks",
+    "allowStar": true
+  },
+  "customsite": {
+    "xmlType": "CustomSite",
+    "folder": "sites",
+    "allowStar": true
+  },
+  "customtab": {
+    "xmlType": "CustomTab",
+    "folder": "tabs",
+    "allowStar": true
+  },
+  "dashboard": {
+    "xmlType": "Dashboard",
+    "folder": "dashboards",
+    "allowStar": false
+  },
+  "datacategorygroup": {
+    "xmlType": "DataCategoryGroup",
+    "folder": "datacategorygroups",
+    "allowStar": true
+  },
+  "document": {
+    "xmlType": "Document",
+    "folder": "document",
+    "allowStar": false
+  },
+  "emailtemplate": {
+    "xmlType": "EmailTemplate",
+    "folder": "email",
+    "allowStar": false
+  },
+  "entitlementprocess": {
+    "xmlType": "EntitlementProcess",
+    "folder": "entitlementProcess",
+    "allowStar": true
+  },
+  "entitlementtemplate": {
+    "xmlType": "EntitlementTemplate",
+    "folder": "entitlementTemplates",
+    "allowStar": true
+  },
+  "escalationrules": {
+    "xmlType": "EscalationRules",
+    "folder": "escalationRules",
+    "allowStar": true
+  },
+  "fieldset": {
+    "xmlType": "FieldSet",
+    "folder": "objects",
+    "allowStar": true
+  },
+  "flow": {
+    "xmlType": "Flow",
+    "folder": "flows",
+    "allowStar": true
+  },
+  "folder": {
+    "xmlType": "Folder",
+    "folder": "documents,email,reports,ordashboards",
+    "allowStar": false
+  },
+  "group": {
+    "xmlType": "Group",
+    "folder": "groups",
+    "allowStar": true
+  },
+  "homepagecomponent": {
+    "xmlType": "HomePageComponent",
+    "folder": "homePageComponents",
+    "allowStar": true
+  },
+  "homepagelayout": {
+    "xmlType": "HomePageLayout",
+    "folder": "homePageLayouts",
+    "allowStar": true
+  },
+  "letterhead": {
+    "xmlType": "Letterhead",
+    "folder": "letterhead",
+    "allowStar": false
+  },
+  "listview": {
+    "xmlType": "ListView",
+    "folder": "objects",
+    "allowStar": false
+  },
+  "namedfilter": {
+    "xmlType": "NamedFilter",
+    "folder": "objects",
+    "allowStar": false
+  },
+  "milestonetype": {
+    "xmlType": "MilestoneType",
+    "folder": "milestoneType",
+    "allowStar": true
+  },
+  "layout": {
+    "xmlType": "Layout",
+    "folder": "layouts",
+    "allowStar": true
+  },
+  "permissionset": {
+    "xmlType": "PermissionSet",
+    "folder": "permissionsets",
+    "allowStar": true
+  },
+  "portal": {
+    "xmlType": "Portal",
+    "folder": "portals",
+    "allowStar": true
+  },
+  "profile": {
+    "xmlType": "Profile",
+    "folder": "profiles",
+    "allowStar": true
+  },
+  "queue": {
+    "xmlType": "Queue",
+    "folder": "queues",
+    "allowStar": true
+  },
+  "recordtype": {
+    "xmlType": "RecordType",
+    "folder": "objects",
+    "allowStar": true
+  },
+  "remotesitesetting": {
+    "xmlType": "RemoteSiteSetting",
+    "folder": "remoteSiteSettings",
+    "allowStar": true
+  },
+  "report": {
+    "xmlType": "Report",
+    "folder": "reports",
+    "allowStar": false
+  },
+  "reporttype": {
+    "xmlType": "ReportType",
+    "folder": "reportTypes",
+    "allowStar": true
+  },
+  "role": {
+    "xmlType": "Role",
+    "folder": "roles",
+    "allowStar": true
+  },
+  "scontrol": {
+    "xmlType": "Scontrol",
+    "folder": "scontrols",
+    "allowStar": true
+  },
+  "sharingreason": {
+    "xmlType": "SharingReason",
+    "folder": "objects",
+    "allowStar": false
+  },
+  "sharingrecalculation": {
+    "xmlType": "SharingRecalculation",
+    "folder": "objects",
+    "allowStar": false
+  },
+  "staticresource": {
+    "xmlType": "StaticResource",
+    "folder": "staticResources",
+    "allowStar": true
+  },
+  "territory": {
+    "xmlType": "Territory",
+    "folder": "territories",
+    "allowStar": true
+  },
+  "translations": {
+    "xmlType": "Translations",
+    "folder": "translations",
+    "allowStar": true
+  },
+  "validationrule": {
+    "xmlType": "ValidationRule",
+    "folder": "objects",
+    "allowStar": false
+  },
+  "apexcomponent": {
+    "xmlType": "ApexComponent",
+    "folder": "components",
+    "allowStar": true
+  },
+  "apexpage": {
+    "xmlType": "ApexPage",
+    "folder": "pages",
+    "allowStar": true
+  },
+  "weblink": {
+    "xmlType": "Weblink",
+    "folder": "objects",
+    "allowStar": false
+  },
+  "workflow": {
+    "xmlType": "Workflow",
+    "folder": "workflows",
+    "allowStar": true
+  }
+}

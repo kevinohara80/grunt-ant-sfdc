@@ -1,6 +1,6 @@
 # grunt-ant-sfdc
 
-> Automate the zip/deploy process for static resourceses to salesforce.com and force.com
+> Add salesforce and force.com ANT tasks to your grunt builds
 
 ## Getting Started
 This plugin requires Grunt `~0.4.0`
@@ -37,48 +37,66 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
+#### options.root
 Type: `String`
-Default value: `',  '`
+Default value: `'build/'`
 
-A string value that is used to do something with whatever.
+The `build` options sets the base directory where metadata lives
 
-#### options.punctuation
+#### options.version
 Type: `String`
-Default value: `'.'`
+Default value: `'27.0'`
 
-A string value that is used to do something else with whatever else.
+This option sets the api version to use for the package deployment
 
 ### Usage Examples
 
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+#### Single Org Deploy
+In this example, we will deploy all static resources to a single org
 
 ```js
 grunt.initConfig({
   ant_sfdc: {
     options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
+    // specify one deploy target
+    dev1: {
+      user:  'myusername@gmail.com',
+      pass:  'mypassword',
+      token: 'myauthtoken',
+      pkg: {
+        staticresource: ['*']
+      }
+    }
+  }
 })
 ```
 
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+#### Multiple Org Deploy
+In this example, we specify two different org deploy targets with different metadata for each
 
 ```js
 grunt.initConfig({
   ant_sfdc: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
+    options: {},
+    // specify one deploy target
+    dev1: {
+      user:  'myusername1@gmail.com',
+      pass:  'mypassword',
+      token: 'myauthtoken',
+      pkg: {
+        staticresource: ['*']
+      }
     },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
+    dev2: {
+      user:  'myusername2@gmail.com',
+      pass:  'mypassword',
+      token: 'myauthtoken',
+      pkg: {
+        staticresource: ['resource1', 'resource2'],
+        apexclass: ['class1', 'class2']
+      }
+    }
+  }
 })
 ```
 
