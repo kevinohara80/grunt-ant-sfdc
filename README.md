@@ -2,7 +2,7 @@
 
 > Add salesforce and force.com ANT tasks to your grunt builds
 
-Note: This currently only supports deploys. More Ant tasks coming!
+**Note:** This currently only supports deploys. More Ant tasks coming!
 
 ## Getting Started
 This plugin requires Grunt `~0.4.0`
