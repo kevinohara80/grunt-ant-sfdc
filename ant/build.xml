@@ -3,10 +3,15 @@
   <property environment="env"/>
 
   <target name="deploy">
-    <!-- Upload the contents of the zip -->
     <sf:deploy username="${SFUSER}" password="${SFPASS}" 
       serverurl="${SERVERURL}" deployroot="${ROOT}">
     </sf:deploy>
+  </target>
+
+  <target name="retrieve">
+    <sf:retrieve username="${SFUSER}" password="${SFPASS}"
+      serverurl="${SERVERURL}" retrieveTarget="${ROOT}" unpackaged="${UNPACKAGED}">
+    </sf:retrieve>
   </target>
 
 </project>

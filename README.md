@@ -2,8 +2,6 @@
 
 > Add salesforce and force.com ANT tasks to your grunt builds
 
-**Note:** This currently only supports deploys. More Ant tasks coming!
-
 ## Getting Started
 This plugin requires Grunt `~0.4.0`
 
@@ -64,9 +62,10 @@ grunt.initConfig({
     options: {},
     // specify one deploy target
     dev1: {
-      user:  'myusername@gmail.com',
-      pass:  'mypassword',
-      token: 'myauthtoken',
+      user:       'myusername@gmail.com',
+      pass:       'mypassword',
+      token:      'myauthtoken',
+      serverurl:  'https://test.salesforce.com' // default => https://login.salesforce.com
       pkg: {
         staticresource: ['*']
       }
@@ -101,6 +100,107 @@ grunt.initConfig({
       pkg: {
         staticresource: ['resource1', 'resource2'],
         apexclass:      ['class1', 'class2']
+      }
+    }
+  }
+})
+```
+
+## The "antretrieve" task
+
+### Overview
+In your project's Gruntfile, add a section named `antretrieve` to the data object passed into `grunt.initConfig()`.
+
+```js
+grunt.initConfig({
+  antretrieve: {
+    options: {
+      // Task-specific options go here.
+    },
+    your_target: {
+      // Target-specific file lists and/or options go here.
+    },
+  },
+})
+```
+
+### Options
+
+#### options.root
+Type: `String`
+Default value: `'build/'`
+
+The `build` options sets the base directory where metadata lives
+
+#### options.version
+Type: `String`
+Default value: `'27.0'`
+
+This option sets the api version to use for the package deployment
+
+### Usage Examples
+
+#### Single Org Retrieve
+In this example, we will retrieve all static resources, classes, and apexpages from a single org
+
+```js
+grunt.initConfig({
+  antretrieve: {
+    options: {},
+    // specify one deploy target
+    dev1: {
+      user:       'myusername@gmail.com',
+      pass:       'mypassword',
+      token:      'myauthtoken',
+      serverurl:  'https://test.salesforce.com' // default => https://login.salesforce.com
+      pkg: {
+        staticresource: ['*'],
+        apexclass:      ['*'],
+        apexpage:       ['*']
+      }
+    }
+  }
+})
+```
+
+#### Single Org, multiple retrieve example
+In this example, we specify one org but multiple retrieve targets
+
+```js
+grunt.initConfig({
+  antretrieve: {
+    options: {
+      root:    'metadata/',
+      version: '27.0'
+    },
+    // specify one deploy target
+    dev1all: {
+      user:       'myusername@gmail.com',
+      pass:       'mypassword',
+      token:      'myauthtoken',
+      pkg: {
+        staticresource: ['*'],
+        apexclass:      ['*'],
+        apexpage:       ['*']
+      }
+    },
+    dev1classes: {
+      user:       'myusername@gmail.com',
+      pass:       'mypassword',
+      token:      'myauthtoken',
+      pkg: {
+        apexclass:      ['*']
+      }
+    },
+    dev1module: {
+      user:       'myusername@gmail.com',
+      pass:       'mypassword',
+      token:      'myauthtoken',
+      pkg: {
+        apexclass:      ['MyClass', 'MyClassTest'],
+        apexpage:       ['MyPage'],
+        staticresource: ['MyPageResource'],
+        apextrigger:    ['MyObjectTrigger']
       }
     }
   }
