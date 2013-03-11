@@ -29,16 +29,16 @@ function buildPackageXml(pkg, version) {
 
     if(!typeName) { grunt.log.error(key + ' is not a valid metadata type'); }
     
-    packageXml.push('  <types>');
+    packageXml.push('    <types>');
     type.forEach(function(t) {
-      packageXml.push('    <members>' + t + '</members>');
+      packageXml.push('        <members>' + t + '</members>');
     });
-    packageXml.push('    <name>' + typeName + '</name>');
-    packageXml.push('  </types>');
+    packageXml.push('        <name>' + typeName + '</name>');
+    packageXml.push('    </types>');
 
   });
 
-  packageXml.push('  <version>' + version + '</version>');
+  packageXml.push('    <version>' + version + '</version>');
   packageXml.push('</Package>');
 
   return packageXml.join('\n');
