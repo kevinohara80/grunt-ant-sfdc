@@ -39,7 +39,7 @@ function buildPackageXml(pkg, version) {
   });
 
   packageXml.push('    <version>' + version + '</version>');
-  packageXml.push('</Package>');
+  packageXml.push('</Package>\n');
 
   return packageXml.join('\n');
 }
