@@ -39,7 +39,7 @@ function buildPackageXml(pkg, version) {
   });
 
   packageXml.push('    <version>' + version + '</version>');
-  packageXml.push('</Package>\n\n');
+  packageXml.push('</Package>');
 
   return packageXml.join('\n');
 }
@@ -65,8 +65,64 @@ module.exports = function(grunt) {
     if(!un) { grunt.log.error('No username specified for ' + this.target); }
     if(!pw) { grunt.log.error('No password specified for ' + this.target); }
 
+    if(!un || !pw) grunt.fail.warn('username/password error');
+
     var packageXml = buildPackageXml(this.data.pkg, options.version);
     grunt.file.write(options.root + '/package.xml', packageXml);
+    
+    var args =  [
+      '-buildfile',
+      buildfile,
+      '-Dbasedir='     + process.cwd(),
+      '-DSFUSER='      + un,
+      '-DSFPASS='      + pw,
+      '-DSERVERURL='   + (this.data.serverurl || 'https://login.salesforce.com'),
+      '-DROOT='        + options.root,
+      'deploy'
+    ];
+
+    grunt.log.debug('ANT CMD: ant ' + args.join(' '));
+
+    grunt.log.writeln('Starting deploy...');
+
+    grunt.util.spawn({
+      cmd: 'ant',
+      args: args
+    }, function(error, result, code) {
+      grunt.log.debug(String(result.stdout));
+      if(error) {
+        grunt.log.error(error);
+      } else {
+        grunt.log.ok('Deployment target ' + target + ' successful');
+      }
+      done();
+    });
+
+  });
+
+  grunt.registerMultiTask('antdestroy', 'Run ANT destructive changes to Salesforce', function() {
+
+    var done = this.async();
+    var target = this.target.green;
+
+    var options = this.options({
+      root: 'build',
+      version: '27.0'
+    });
+
+    grunt.log.writeln('Deploy Target -> ' + target);
+
+    var un = this.data.user;
+    var pw = this.data.pass;
+    if(this.data.token) { pw += this.data.token; }
+
+    if(!un) { grunt.log.error('No username specified for ' + this.target); }
+    if(!pw) { grunt.log.error('No password specified for ' + this.target); }
+
+    if(!un || !pw) grunt.fail.warn('username/password error');
+
+    var packageXml = buildPackageXml(this.data.pkg, options.version);
+    grunt.file.write(options.root + '/destructiveChanges.xml', packageXml);
     
     var args =  [
       '-buildfile',
@@ -114,8 +170,10 @@ module.exports = function(grunt) {
     var pw = this.data.pass;
     if(this.data.token) { pw += this.data.token; }
 
-    if(!un) { grunt.log.error('No username specified for ' + this.target); }
-    if(!pw) { grunt.log.error('No password specified for ' + this.target); }
+    if(!un) { grunt.log.error('no username specified for ' + this.target); }
+    if(!pw) { grunt.log.error('no password specified for ' + this.target); }
+
+    if(!un || !pw) grunt.fail.warn('username/password error');
 
     var packageXml = buildPackageXml(this.data.pkg, options.version);
     grunt.file.write(options.root + '/package.xml', packageXml);
