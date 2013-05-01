@@ -53,19 +53,24 @@ module.exports = function(grunt) {
 
     var options = this.options({
       root: 'build',
-      version: '27.0'
+      version: '27.0',
+      useEnv: false
     });
 
     grunt.log.writeln('Deploy Target -> ' + target);
 
-    var un = this.data.user;
-    var pw = this.data.pass;
-    if(this.data.token) { pw += this.data.token; }
+    var un = (!options.useEnv) ? this.data.user : process.env.SFUSER;
+    var pw = (!options.useEnv) ? this.data.pass : process.env.SFPASS;
+    var tk = (!options.useEnv) ? this.data.token : process.env.SFTOKEN;
+
+    if(tk) pw += tk;
 
     if(!un) { grunt.log.error('No username specified for ' + this.target); }
     if(!pw) { grunt.log.error('No password specified for ' + this.target); }
 
     if(!un || !pw) grunt.fail.warn('username/password error');
+
+    grunt.log.writeln('User -> ' + un.green);
 
     var packageXml = buildPackageXml(this.data.pkg, options.version);
     grunt.file.write(options.root + '/package.xml', packageXml);
@@ -107,19 +112,24 @@ module.exports = function(grunt) {
 
     var options = this.options({
       root: 'build',
-      version: '27.0'
+      version: '27.0',
+      useEnv: false
     });
 
     grunt.log.writeln('Deploy Target -> ' + target);
 
-    var un = this.data.user;
-    var pw = this.data.pass;
-    if(this.data.token) { pw += this.data.token; }
+    var un = (!options.useEnv) ? this.data.user : process.env.SFUSER;
+    var pw = (!options.useEnv) ? this.data.pass : process.env.SFPASS;
+    var tk = (!options.useEnv) ? this.data.token : process.env.SFTOKEN;
+
+    if(tk) pw += tk;
 
     if(!un) { grunt.log.error('No username specified for ' + this.target); }
     if(!pw) { grunt.log.error('No password specified for ' + this.target); }
 
     if(!un || !pw) grunt.fail.warn('username/password error');
+
+    grunt.log.writeln('User -> ' + un.green);
 
     var packageXml = buildPackageXml(this.data.pkg, options.version);
     grunt.file.write(options.root + '/destructiveChanges.xml', packageXml);
@@ -161,19 +171,24 @@ module.exports = function(grunt) {
 
     var options = this.options({
       root: 'build',
-      version: '27.0'
+      version: '27.0',
+      useEnv: false
     });
 
     grunt.log.writeln('Retrieve Target -> ' + target);
 
-    var un = this.data.user;
-    var pw = this.data.pass;
-    if(this.data.token) { pw += this.data.token; }
+    var un = (!options.useEnv) ? this.data.user : process.env.SFUSER;
+    var pw = (!options.useEnv) ? this.data.pass : process.env.SFPASS;
+    var tk = (!options.useEnv) ? this.data.token : process.env.SFTOKEN;
+
+    if(tk) pw += tk;
 
     if(!un) { grunt.log.error('no username specified for ' + this.target); }
     if(!pw) { grunt.log.error('no password specified for ' + this.target); }
 
     if(!un || !pw) grunt.fail.warn('username/password error');
+
+    grunt.log.writeln('User -> ' + un.green);
 
     var packageXml = buildPackageXml(this.data.pkg, options.version);
     grunt.file.write(options.root + '/package.xml', packageXml);
