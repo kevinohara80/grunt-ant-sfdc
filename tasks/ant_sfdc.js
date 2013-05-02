@@ -56,7 +56,7 @@ module.exports = function(grunt) {
     var options = this.options({
       root: 'build',
       version: '27.0',
-      useEnv: false,
+      useEnv: false,         // use env vars for auth (SFUSER, SFPASS, and SFTOKEN)
       checkOnly: false,
       runAllTests: false,
       rollbackOnError: true
