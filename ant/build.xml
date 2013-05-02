@@ -4,7 +4,9 @@
 
   <target name="deploy">
     <sf:deploy username="${SFUSER}" password="${SFPASS}" 
-      serverurl="${SERVERURL}" deployroot="${ROOT}">
+      serverurl="${SERVERURL}" deployroot="${ROOT}" 
+      checkonly="${CHECKONLY}" runAllTests="${RUNALLTESTS}"
+      rollbackOnError="${ROLLBACK}">
     </sf:deploy>
   </target>
 

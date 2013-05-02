@@ -45,6 +45,8 @@ function buildPackageXml(pkg, version) {
 }
 
 module.exports = function(grunt) {
+
+  // ANT DEPLOY
   
   grunt.registerMultiTask('antdeploy', 'Run ANT deploy to Salesforce', function() {
 
@@ -54,13 +56,16 @@ module.exports = function(grunt) {
     var options = this.options({
       root: 'build',
       version: '27.0',
-      useEnv: false
+      useEnv: false,
+      checkOnly: false,
+      runAllTests: false,
+      rollbackOnError: true
     });
 
     grunt.log.writeln('Deploy Target -> ' + target);
 
-    var un = (!options.useEnv) ? this.data.user : process.env.SFUSER;
-    var pw = (!options.useEnv) ? this.data.pass : process.env.SFPASS;
+    var un = (!options.useEnv) ? this.data.user  : process.env.SFUSER;
+    var pw = (!options.useEnv) ? this.data.pass  : process.env.SFPASS;
     var tk = (!options.useEnv) ? this.data.token : process.env.SFTOKEN;
 
     if(tk) pw += tk;
@@ -75,6 +80,7 @@ module.exports = function(grunt) {
     var packageXml = buildPackageXml(this.data.pkg, options.version);
     grunt.file.write(options.root + '/package.xml', packageXml);
     
+    // build up our cli args
     var args =  [
       '-buildfile',
       buildfile,
@@ -83,11 +89,21 @@ module.exports = function(grunt) {
       '-DSFPASS='      + pw,
       '-DSERVERURL='   + (this.data.serverurl || 'https://login.salesforce.com'),
       '-DROOT='        + options.root,
-      'deploy'
+      '-DCHECKONLY='   + options.checkOnly,
+      '-DRUNALLTESTS=' + options.runAllTests,
+      '-DROLLBACK='    + options.rollbackOnError
     ];
 
-    grunt.log.debug('ANT CMD: ant ' + args.join(' '));
+    if(this.data.tests) {
+      if(typeof this.data.tests !== 'string') {
+        this.data.tests = this.data.test.join(',');
+      }
+      args.push('-DTESTS' + this.data.tests);
+    }
 
+    args.push('deploy');
+
+    grunt.log.debug('ANT CMD: ant ' + args.join(' '));
     grunt.log.writeln('Starting deploy...');
 
     grunt.util.spawn({
@@ -105,6 +121,8 @@ module.exports = function(grunt) {
 
   });
 
+  // ANT DESTROY
+
   grunt.registerMultiTask('antdestroy', 'Run ANT destructive changes to Salesforce', function() {
 
     var done = this.async();
@@ -118,8 +136,8 @@ module.exports = function(grunt) {
 
     grunt.log.writeln('Deploy Target -> ' + target);
 
-    var un = (!options.useEnv) ? this.data.user : process.env.SFUSER;
-    var pw = (!options.useEnv) ? this.data.pass : process.env.SFPASS;
+    var un = (!options.useEnv) ? this.data.user  : process.env.SFUSER;
+    var pw = (!options.useEnv) ? this.data.pass  : process.env.SFPASS;
     var tk = (!options.useEnv) ? this.data.token : process.env.SFTOKEN;
 
     if(tk) pw += tk;
@@ -164,6 +182,8 @@ module.exports = function(grunt) {
 
   });
 
+  // ANT RETRIEVE
+
   grunt.registerMultiTask('antretrieve', 'Run ANT retrieve to get metadata from Salesforce', function() {
 
     var done = this.async();
@@ -177,8 +197,8 @@ module.exports = function(grunt) {
 
     grunt.log.writeln('Retrieve Target -> ' + target);
 
-    var un = (!options.useEnv) ? this.data.user : process.env.SFUSER;
-    var pw = (!options.useEnv) ? this.data.pass : process.env.SFPASS;
+    var un = (!options.useEnv) ? this.data.user  : process.env.SFUSER;
+    var pw = (!options.useEnv) ? this.data.pass  : process.env.SFPASS;
     var tk = (!options.useEnv) ? this.data.token : process.env.SFTOKEN;
 
     if(tk) pw += tk;
