@@ -1,0 +1,16 @@
+<project name="Grunt Salesforce Ant Deploy" default="deploy" xmlns:sf="antlib:com.salesforce">
+
+  <target name="deploy">
+    <sf:deploy 
+      username="<%= user %>" 
+      password="<%= pass %>" 
+      serverurl="<%= serverurl %>" 
+      deployroot="<%= root %>" 
+      checkonly="<%= checkOnly %>" 
+      runAllTests="<%= runAllTests %>"
+      rollbackOnError="<%= rollbackOnError %>">
+      <% _.forEach(tests, function(t) { %><runTest><%= t %></runTest><% }); %>
+    </sf:deploy>
+  </target>
+
+</project>

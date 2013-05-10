@@ -1,0 +1,14 @@
+<project name="Grunt Salesforce Ant Describe" default="describe" xmlns:sf="antlib:com.salesforce">
+
+  <target name="describe">
+    <sf:describeMetadata 
+      username="<%= user %>" 
+      password="<%= pass %>" 
+      serverurl="<%= serverurl %>" 
+      apiVersion="<%= apiVersion %>"
+      resultFilePath="<%= resultFilePath %>"
+      trace="<%= trace %>">
+    </sf:describeMetadata >
+  </target>
+
+</project>

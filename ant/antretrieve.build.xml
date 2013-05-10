@@ -1,0 +1,15 @@
+<project name="Grunt Salesforce Ant Retrieve" default="retrieve" xmlns:sf="antlib:com.salesforce">
+
+  <target name="retrieve">
+    <sf:retrieve 
+      username="<%= user %>" 
+      password="<%= pass %>" 
+      serverurl="<%= serverurl %>" 
+      apiVersion="<%= apiVersion %>"
+      retrieveTarget="<%= retrieveTarget %>"
+      unpackaged="<%= unpackaged %>"
+      unzip="<%= unzip %>">
+    </sf:retrieve >
+  </target>
+
+</project>
