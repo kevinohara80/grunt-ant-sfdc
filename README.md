@@ -19,6 +19,39 @@ One the plugin has been installed, it may be enabled inside your Gruntfile with 
 grunt.loadNpmTasks('grunt-ant-sfdc');
 ```
 
+## Options for all tasks
+
+The following are options that can be defined for all tasks...
+
+#### options.user
+Type: `String`
+Required: `true`
+Your Salesforce.com username
+
+#### options.pass
+Type: `String`
+Required: `true`
+Your Salesforce.com password
+
+#### options.token
+Type: `String`
+Your Salesforce.com password
+
+#### options.serverurl
+Type: `String`
+Default value: `'https://login.salesforce.com'`
+This option sets the api version to use for the package deployment
+
+#### options.apiVersion
+Type: `String`
+Default value: `'27.0'`
+This option sets the api version to use for the package deployment
+
+#### options.useEnv
+Type: `Boolean`
+Default value: `false`
+This option will tell the task to look in environment variables for your Salesforce authentication details. This is really handy for making things secure and not having to put your login details in the Gruntfile. Make sure you set your username `SFUSER`, password `SFPASS`, and optionally your token `SFTOKEN`
+
 ## The "antdeploy" task
 
 ### Overview
@@ -37,19 +70,27 @@ grunt.initConfig({
 })
 ```
 
-### Options
+### Task-specific options
 
 #### options.root
 Type: `String`
 Default value: `'build/'`
+The root options sets the base directory where metadata lives
 
-The `build` options sets the base directory where metadata lives
+#### options.checkonly
+Type: `Boolean`
+Default value: `false`
+This option sets whether this is a checkonly deploy or not
 
-#### options.version
-Type: `String`
-Default value: `'27.0'`
+#### options.runAllTests
+Type: `Boolean`
+Default value: `false`
+This option sets whether or not to run all tests
 
-This option sets the api version to use for the package deployment
+#### options.rollbackOnError
+Type: `Boolean`
+Default value: `true`
+This option sets whether or not to roll back changes on test error
 
 ### Usage Examples
 
@@ -62,10 +103,12 @@ grunt.initConfig({
     options: {},
     // specify one deploy target
     dev1: {
-      user:       'myusername@gmail.com',
-      pass:       'mypassword',
-      token:      'myauthtoken',
-      serverurl:  'https://test.salesforce.com' // default => https://login.salesforce.com
+      options: {
+        user:      'myusername@test.com',
+        pass:      'mypassword',
+        token:     'mytoken',
+        serverurl: 'https://test.salesforce.com' // default => https://login.salesforce.com
+      },
       pkg: {
         staticresource: ['*']
       }
@@ -86,20 +129,23 @@ grunt.initConfig({
     },
     // specify one deploy target
     dev1: {
-      user:  'myusername1@gmail.com',
-      pass:  'mypassword',
-      token: 'myauthtoken',
+      options: {
+        user:  'myusername@test.com',
+        pass:  'mypassword',
+        token: 'mytoken'
+      },
       pkg: {
         staticresource: ['*']
       }
     },
     dev2: {
-      user:  'myusername2@gmail.com',
-      pass:  'mypassword',
-      token: 'myauthtoken',
+      options: {
+        user:  'myusername2@test.com',
+        pass:  'mypassword2',
+        token: 'mytoken2'
+      },
       pkg: {
-        staticresource: ['resource1', 'resource2'],
-        apexclass:      ['class1', 'class2']
+        staticresource: ['*']
       }
     }
   }
@@ -124,19 +170,22 @@ grunt.initConfig({
 })
 ```
 
-### Options
+### Task-specific options
 
 #### options.root
 Type: `String`
 Default value: `'build/'`
+The root option sets the base directory where metadata lives
 
-The `build` options sets the base directory where metadata lives
-
-#### options.version
+#### options.retrieveTarget
 Type: `String`
 Default value: `'27.0'`
+This sets the target directory for the retrieve. This will default to the `root` if not set.
 
-This option sets the api version to use for the package deployment
+#### options.unzip
+Type: `Boolean`
+Default value: `true`
+This set whether or not the retrieve should be unzipped upon completion
 
 ### Usage Examples
 
@@ -146,12 +195,12 @@ In this example, we will retrieve all static resources, classes, and apexpages f
 ```js
 grunt.initConfig({
   antretrieve: {
-    options: {},
-    // specify one deploy target
+    options: {
+      user: 'myusername@gmail.com',
+      pass: 'mypass' 
+    },
+    // specify one retrieve target
     dev1: {
-      user:       'myusername@gmail.com',
-      pass:       'mypassword',
-      token:      'myauthtoken',
       serverurl:  'https://test.salesforce.com' // default => https://login.salesforce.com
       pkg: {
         staticresource: ['*'],
@@ -175,9 +224,11 @@ grunt.initConfig({
     },
     // specify one deploy target
     dev1all: {
-      user:       'myusername@gmail.com',
-      pass:       'mypassword',
-      token:      'myauthtoken',
+      options: {
+        user:  'myusername@gmail.com',
+        pass:  'mypassword',
+        token: 'myauthtoken',
+      },
       pkg: {
         staticresource: ['*'],
         apexclass:      ['*'],
@@ -185,17 +236,21 @@ grunt.initConfig({
       }
     },
     dev1classes: {
-      user:       'myusername@gmail.com',
-      pass:       'mypassword',
-      token:      'myauthtoken',
+      options: {
+        user:  'myusername@gmail.com',
+        pass:  'mypassword',
+        token: 'myauthtoken'
+      },
       pkg: {
-        apexclass:      ['*']
+        apexclass: ['*']
       }
     },
     dev1module: {
-      user:       'myusername@gmail.com',
-      pass:       'mypassword',
-      token:      'myauthtoken',
+      options: {
+        user:  'myusername@gmail.com',
+        pass:  'mypassword',
+        token: 'myauthtoken'
+      },
       pkg: {
         apexclass:      ['MyClass', 'MyClassTest'],
         apexpage:       ['MyPage'],
