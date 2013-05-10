@@ -67,7 +67,7 @@ module.exports = function(grunt) {
     grunt.log.writeln('User -> ' + options.user.green);
   }
 
-  function runAnt(task, args, done) {
+  function runAnt(task, target, args, done) {
     grunt.log.debug('ANT CMD: ant ' + args.join(' '));
     grunt.log.writeln('Starting ' + task + '...');
     grunt.util.spawn({
@@ -112,7 +112,7 @@ module.exports = function(grunt) {
 
     grunt.log.writeln('Deploy Target -> ' + target);
 
-    parseAuth(options, this.target);
+    parseAuth(options, target);
 
     options.tests = this.data.tests || [];
 
@@ -130,7 +130,7 @@ module.exports = function(grunt) {
       'deploy'
     ];
 
-    runAnt('deploy', args, done);
+    runAnt('deploy', target, args, done);
 
   });
 
@@ -157,7 +157,7 @@ module.exports = function(grunt) {
 
     grunt.log.writeln('Destroy Target -> ' + target);
 
-    parseAuth(options, this.target);
+    parseAuth(options, target);
 
     options.tests = this.data.tests || [];
 
@@ -177,7 +177,7 @@ module.exports = function(grunt) {
       'deploy'
     ];
 
-    runAnt('destroy', args, done);
+    runAnt('destroy', target, args, done);
 
   });
 
@@ -201,23 +201,22 @@ module.exports = function(grunt) {
       apiVersion: '27.0',
       serverurl: 'https://login.salesforce.com',
       retrieveTarget: false,
-      unpackaged: false,
       unzip: true,
       useEnv: false
     });
 
     grunt.log.writeln('Retrieve Target -> ' + target);
 
-    parseAuth(options, this.target);
+    parseAuth(options, target);
 
-    if(!options.unpackaged) options.unpackaged = path.normalize(options.root + '/package.xml');
+    options.unpackaged = localTmp + '/package.xml';
     if(!options.retrieveTarget) options.retrieveTarget = options.root;
 
     var buildFile = grunt.template.process(template, { data: options });
     grunt.file.write(localTmp + '/ant/build.xml', buildFile);
 
     var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
-    grunt.file.write(options.root + '/package.xml', packageXml);
+    grunt.file.write(localTmp + '/package.xml', packageXml);
 
     var args =  [
       '-buildfile',
@@ -226,7 +225,7 @@ module.exports = function(grunt) {
       'retrieve'
     ];
 
-    runAnt('retrieve', args, done);
+    runAnt('retrieve', target, args, done);
 
   });
 
@@ -255,7 +254,7 @@ module.exports = function(grunt) {
 
     grunt.log.writeln('Describe Target -> ' + target);
 
-    parseAuth(options, this.target);
+    parseAuth(options, target);
 
     var buildFile = grunt.template.process(template, { data: options });
     grunt.file.write(localTmp + '/ant/build.xml', buildFile);
@@ -267,7 +266,7 @@ module.exports = function(grunt) {
       'describe'
     ];
 
-    runAnt('describe', args, done);
+    runAnt('describe', target, args, done);
 
   });
 
