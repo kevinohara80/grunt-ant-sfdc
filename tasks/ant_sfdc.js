@@ -13,6 +13,24 @@ var metadata = require('../lib/metadata.json');
 var localTmp = path.resolve(__dirname, '../tmp');
 var localAnt = path.resolve(__dirname, '../ant');
 
+function lookupMetadata(key) {
+  key = key.toLowerCase();
+  var typeName;
+  // try to match on metadata type
+  if(metadata[key] && metadata[key].xmlType) {
+    typeName = metadata[key].xmlType;
+  } else {
+    // try to match on folder
+    var typeName;
+    Object.keys(metadata).forEach(function(mk) {
+      if(metadata[mk].folder.toLowerCase() === key) {
+        typeName = metadata[mk].xmlType;
+      }
+    });
+  }
+  return typeName;
+}
+
 function buildPackageXml(pkg, version) {
   var packageXml = [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -21,11 +39,8 @@ function buildPackageXml(pkg, version) {
   if(pkg) {
     Object.keys(pkg).forEach(function(key) {  
       var type = pkg[key];
-      var typeName;
-      if(metadata[key.toLowerCase()] && metadata[key.toLowerCase()].xmlType) {
-        typeName = metadata[key.toLowerCase()].xmlType;
-      }
-      if(!typeName) { grunt.log.error(key + ' is not a valid metadata type'); }
+      var typeName = lookupMetadata(key);
+      if(!typeName) { grunt.fail.fatal(key + ' is not a valid metadata type'); }
       packageXml.push('    <types>');
       type.forEach(function(t) {
         packageXml.push('        <members>' + t + '</members>');
