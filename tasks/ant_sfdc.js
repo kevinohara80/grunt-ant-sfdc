@@ -12,6 +12,7 @@ var path     = require('path');
 var metadata = require('../lib/metadata.json');
 var localTmp = path.resolve(__dirname, '../tmp');
 var localAnt = path.resolve(__dirname, '../ant');
+var localLib = path.resolve(__dirname, '../deps');
 
 function lookupMetadata(key) {
   key = key.toLowerCase();
@@ -79,6 +80,9 @@ module.exports = function(grunt) {
     if(!un || !pw) grunt.fail.warn('username/password error');
     options.user = un;
     options.pass = pw;
+    if(options.useEnv && process.env.SFSERVERURL) {
+      options.serverurl = process.env.SFSERVERURL;
+    }
     grunt.log.writeln('User -> ' + options.user.green);
   }
 
@@ -141,6 +145,8 @@ module.exports = function(grunt) {
     var args =  [
       '-buildfile',
       localTmp + '/ant/build.xml',
+      '-lib',
+      localLib,
       '-Dbasedir='     + process.cwd(),
       'deploy'
     ];
@@ -188,6 +194,8 @@ module.exports = function(grunt) {
     var args =  [
       '-buildfile',
       localTmp + '/ant/build.xml',
+      '-lib',
+      localLib,
       '-Dbasedir='     + process.cwd(),
       'deploy'
     ];
@@ -236,6 +244,8 @@ module.exports = function(grunt) {
     var args =  [
       '-buildfile',
       localTmp + '/ant/build.xml',
+      '-lib',
+      localLib,
       '-Dbasedir='     + process.cwd(),
       'retrieve'
     ];
@@ -274,9 +284,13 @@ module.exports = function(grunt) {
     var buildFile = grunt.template.process(template, { data: options });
     grunt.file.write(localTmp + '/ant/build.xml', buildFile);
 
+    grunt.file.write(options.resultFilePath);
+
     var args =  [
       '-buildfile',
       localTmp + '/ant/build.xml',
+      '-lib',
+      localLib,
       '-Dbasedir='     + process.cwd(),
       'describe'
     ];
