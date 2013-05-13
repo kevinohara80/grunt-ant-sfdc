@@ -96,7 +96,7 @@ module.exports = function(grunt) {
     ];
     args.push(task);
     grunt.log.debug('ANT CMD: ant ' + args.join(' '));
-    grunt.log.writeln('Starting ' + task + '...');
+    grunt.log.writeln('Starting ANT ' + task + '...');
     grunt.util.spawn({
       cmd: 'ant',
       args: args
@@ -107,8 +107,7 @@ module.exports = function(grunt) {
       } else {
         grunt.log.ok(task + ' target ' + target + ' successful');
       }
-      clearLocalTmp();
-      done();
+      done(error, result);
     });
   }
 
@@ -149,7 +148,10 @@ module.exports = function(grunt) {
     var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
     grunt.file.write(options.root + '/package.xml', packageXml);
 
-    runAnt('deploy', target, done);
+    runAnt('deploy', target, function(err, result) {
+      clearLocalTmp();
+      done();
+    });
 
   });
 
@@ -189,7 +191,10 @@ module.exports = function(grunt) {
     var destructiveXml = buildPackageXml(this.data.pkg, options.apiVersion);
     grunt.file.write(localTmp + '/src/destructiveChanges.xml', destructiveXml);
 
-    runAnt('deploy', target, done);
+    runAnt('deploy', target, function(err, result) {
+      clearLocalTmp();
+      done();
+    });
 
   });
 
@@ -230,7 +235,10 @@ module.exports = function(grunt) {
     var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
     grunt.file.write(localTmp + '/package.xml', packageXml);
 
-    runAnt('retrieve', target, done);
+    runAnt('retrieve', target, function(err, result) {
+      clearLocalTmp();
+      done();
+    });
 
   });
 
@@ -253,9 +261,14 @@ module.exports = function(grunt) {
       apiVersion: '27.0',
       serverurl: 'https://login.salesforce.com',
       resultFilePath: '',
+      format: 'log',
       trace: false,
       useEnv: false
     });
+
+    var finalDest = options.resultFilePath;
+
+    options.resultFilePath = localTmp + '/list.log';
 
     grunt.log.writeln('Describe Target -> ' + target);
 
@@ -266,7 +279,160 @@ module.exports = function(grunt) {
 
     grunt.file.write(options.resultFilePath);
 
-    runAnt('describe', target, done);
+    runAnt('describe', target, function(err, results) {
+      if(err) {
+        done();
+      } else if(options.format === 'json') {
+        grunt.log.writeln('parsing response to json');
+        var logFile = grunt.file.read(options.resultFilePath);
+        var lines = logFile.split('\n');
+        
+        var jsonData = {};
+        var currentType = 'types';
+        var md;
+
+        for(var i=0; i<lines.length; i++) {
+          var line = lines[i].split(':');
+          if(line.length === 2) {
+            var prop = line[0].trim();
+            var val = line[1].trim();
+            var valsplit = val.split(',');
+            // start of a new md section
+
+            if(prop === 'ChildObjects') {
+              if(valsplit.length > 1) {
+                var arr = [];
+                for(var a=0; a<valsplit.length; a++) {
+                  var part = valsplit[a].trim();
+                  if(!/^\*.*/.test(part)) {
+                    arr.push(part);
+                  }
+                }
+                val = arr;
+              } else if(/^\*.*/.test(val)) {
+                val = [];
+              }
+            } else {
+              if(val === 'false') val = false;
+              if(val === 'true') val = true;
+            }
+            if(!md) md = {};
+            md[prop] = val;
+          } else {
+            if(md && currentType) {
+              if(!jsonData[currentType]) jsonData[currentType] = [];
+              jsonData[currentType].push(grunt.util._.clone(md));
+              md = null;
+            }
+          }
+        }
+        grunt.file.write(finalDest, JSON.stringify(jsonData, null, '\t'));
+      } else {
+        grunt.file.copy(options.resultFilePath, finalDest);
+      }
+      clearLocalTmp()
+      done();
+    });
+
+  });
+
+  /*************************************
+   * antlist task
+   *************************************/
+
+   grunt.registerMultiTask('antlist', 'List metadata for a certain type', function() {
+    
+    makeLocalTmp();
+
+    var done = this.async();
+    var target = this.target.green;
+    var template = grunt.file.read(localAnt + '/antlist.build.xml');
+
+    var options = this.options({
+      user: false,
+      pass: false,
+      token: false,
+      apiVersion: '27.0',
+      serverurl: 'https://login.salesforce.com',
+      resultFilePath: '',
+      metadataType: '',
+      folder: '',
+      format: 'log',
+      trace: false,
+      useEnv: false
+    });
+
+    var finalDest = options.resultFilePath;
+
+    options.resultFilePath = localTmp + '/list.log';
+
+    grunt.log.writeln('ListMetadata Target -> ' + target);
+
+    parseAuth(options, target);
+
+    var buildFile = grunt.template.process(template, { data: options });
+    grunt.file.write(localTmp + '/ant/build.xml', buildFile);
+
+    grunt.file.write(options.resultFilePath);
+
+    runAnt('listmetadata', target, function(err, results) {
+      if(err) {
+        done();
+      } else if(options.format === 'json') {
+        grunt.log.writeln('parsing response to json');
+        var logFile = grunt.file.read(options.resultFilePath);
+        var lines = logFile.split('\n');
+        
+        var jsonData = {};
+        var currentType;
+        var md;
+
+        for(var i=0; i<lines.length; i++) {
+          var line = lines[i].split(':');
+          if(line.length === 2) {
+            var prop = line[0].trim();
+            var val = line[1].trim();
+            var valsplit = val.split('/');
+            // start of a new md section
+            if(prop === 'FileName') {
+              if(!jsonData[valsplit[0]]) jsonData[valsplit[0]] = [];
+              currentType = valsplit[0];
+              
+              if(!md) md = {};
+              md.FileName = val;
+
+            } else if(prop === 'FullName/Id') {
+              valsplit = val.split('/');
+              md.FullName = valsplit[0];
+              md.Id = valsplit[1];
+            } else if(prop === 'Manageable State') {
+              md.ManageableState = val;
+            } else if(prop === 'Namespace Prefix') {
+              md.NamespacePrefix = val;
+            } else if(prop === 'Created By (Name/Id)') {
+              if(!md.CreatedBy) md.CreatedBy = {};
+              md.CreatedBy.Name = valsplit[0];
+              md.CreatedBy.Id = valsplit[1];
+            } else if(prop === 'Last Modified By (Name/Id)') {
+              if(!md.LastModifiedBy) md.LastModifiedBy = {};
+              md.LastModifiedBy.Name = valsplit[0];
+              md.LastModifiedBy.Id = valsplit[1];
+            }
+          } else {
+            if(md && currentType) {
+              if(!jsonData[currentType]) jsonData[currentType] = [];
+              jsonData[currentType].push(grunt.util._.clone(md));
+              md = null;
+            }
+          }
+        }
+        grunt.file.write(finalDest, JSON.stringify(jsonData, null, '\t'));
+      } else {
+        grunt.file.copy(options.resultFilePath, finalDest);
+      }
+      clearLocalTmp()
+      done();
+    });
 
   });
 

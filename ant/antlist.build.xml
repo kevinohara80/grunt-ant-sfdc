@@ -1,0 +1,16 @@
+<project name="Grunt Salesforce Ant List Metadata" default="listmetadata" xmlns:sf="antlib:com.salesforce">
+
+  <target name="listmetadata">
+    <sf:listMetadata 
+      username="<%= user %>" 
+      password="<%= pass %>" 
+      serverurl="<%= serverurl %>" 
+      apiVersion="<%= apiVersion %>"
+      folder="<%= folder %>"
+      metadataType="<%= metadataType %>"
+      resultFilePath="<%= resultFilePath %>"
+      trace="<%= trace %>">
+    </sf:listMetadata>
+  </target>
+
+</project>
