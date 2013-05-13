@@ -86,7 +86,15 @@ module.exports = function(grunt) {
     grunt.log.writeln('User -> ' + options.user.green);
   }
 
-  function runAnt(task, target, args, done) {
+  function runAnt(task, target, done) {
+    var args =  [
+      '-buildfile',
+      localTmp + '/ant/build.xml',
+      '-lib',
+      localLib,
+      '-Dbasedir='     + process.cwd()
+    ];
+    args.push(task);
     grunt.log.debug('ANT CMD: ant ' + args.join(' '));
     grunt.log.writeln('Starting ' + task + '...');
     grunt.util.spawn({
@@ -140,18 +148,8 @@ module.exports = function(grunt) {
 
     var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
     grunt.file.write(options.root + '/package.xml', packageXml);
-    
-    // build up our cli args
-    var args =  [
-      '-buildfile',
-      localTmp + '/ant/build.xml',
-      '-lib',
-      localLib,
-      '-Dbasedir='     + process.cwd(),
-      'deploy'
-    ];
 
-    runAnt('deploy', target, args, done);
+    runAnt('deploy', target, done);
 
   });
 
@@ -191,16 +189,7 @@ module.exports = function(grunt) {
     var destructiveXml = buildPackageXml(this.data.pkg, options.apiVersion);
     grunt.file.write(localTmp + '/src/destructiveChanges.xml', destructiveXml);
 
-    var args =  [
-      '-buildfile',
-      localTmp + '/ant/build.xml',
-      '-lib',
-      localLib,
-      '-Dbasedir='     + process.cwd(),
-      'deploy'
-    ];
-
-    runAnt('destroy', target, args, done);
+    runAnt('deploy', target, done);
 
   });
 
@@ -241,16 +230,7 @@ module.exports = function(grunt) {
     var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
     grunt.file.write(localTmp + '/package.xml', packageXml);
 
-    var args =  [
-      '-buildfile',
-      localTmp + '/ant/build.xml',
-      '-lib',
-      localLib,
-      '-Dbasedir='     + process.cwd(),
-      'retrieve'
-    ];
-
-    runAnt('retrieve', target, args, done);
+    runAnt('retrieve', target, done);
 
   });
 
@@ -286,16 +266,7 @@ module.exports = function(grunt) {
 
     grunt.file.write(options.resultFilePath);
 
-    var args =  [
-      '-buildfile',
-      localTmp + '/ant/build.xml',
-      '-lib',
-      localLib,
-      '-Dbasedir='     + process.cwd(),
-      'describe'
-    ];
-
-    runAnt('describe', target, args, done);
+    runAnt('describe', target, done);
 
   });
 
