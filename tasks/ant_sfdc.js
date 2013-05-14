@@ -24,35 +24,21 @@ function lookupMetadata(key) {
     // try to match on folder
     var typeName;
     Object.keys(metadata).forEach(function(mk) {
-      if(metadata[mk].folder.toLowerCase() === key) {
+      var folder = metadata[mk].folder;
+      if(typeof folder === 'string' && folder.toLowerCase() === key) {
         typeName = metadata[mk].xmlType;
+      } else if(key === 'documents') {
+        typeName = metadata['document'].xmlType;
+      } else if(key === 'emails') {
+        typeName = metadata['email'].xmlType;
+      } else if(key === 'reports') {
+        typeName = metadata['report'].xmlType;
+      } else if(key === 'dashboards') {
+        typeName = metadata['dashboard'].xmlType;
       }
     });
   }
   return typeName;
-}
-
-function buildPackageXml(pkg, version) {
-  var packageXml = [
-    '<?xml version="1.0" encoding="UTF-8"?>',
-    '<Package xmlns="http://soap.sforce.com/2006/04/metadata">'
-  ];
-  if(pkg) {
-    Object.keys(pkg).forEach(function(key) {  
-      var type = pkg[key];
-      var typeName = lookupMetadata(key);
-      if(!typeName) { grunt.fail.fatal(key + ' is not a valid metadata type'); }
-      packageXml.push('    <types>');
-      type.forEach(function(t) {
-        packageXml.push('        <members>' + t + '</members>');
-      });
-      packageXml.push('        <name>' + typeName + '</name>');
-      packageXml.push('    </types>');
-    });
-  }
-  packageXml.push('    <version>' + version + '</version>');
-  packageXml.push('</Package>');
-  return packageXml.join('\n');
 }
 
 // export
@@ -109,6 +95,29 @@ module.exports = function(grunt) {
       }
       done(error, result);
     });
+  }
+
+  function buildPackageXml(pkg, version) {
+    var packageXml = [
+      '<?xml version="1.0" encoding="UTF-8"?>',
+      '<Package xmlns="http://soap.sforce.com/2006/04/metadata">'
+    ];
+    if(pkg) {
+      Object.keys(pkg).forEach(function(key) {  
+        var type = pkg[key];
+        var typeName = lookupMetadata(key);
+        if(!typeName) { grunt.fail.fatal(key + ' is not a valid metadata type'); }
+        packageXml.push('    <types>');
+        type.forEach(function(t) {
+          packageXml.push('        <members>' + t + '</members>');
+        });
+        packageXml.push('        <name>' + typeName + '</name>');
+        packageXml.push('    </types>');
+      });
+    }
+    packageXml.push('    <version>' + version + '</version>');
+    packageXml.push('</Package>');
+    return packageXml.join('\n');
   }
 
   /*************************************
@@ -171,8 +180,12 @@ module.exports = function(grunt) {
       user: false,
       pass: false,
       token: false,
-      root: localTmp + '/src',
+      root: 'build',
       apiVersion: '27.0',
+      serverurl: 'https://login.salesforce.com',
+      checkOnly: false,
+      runAllTests: false,
+      rollbackOnError: true,
       useEnv: false
     });
 
@@ -186,10 +199,10 @@ module.exports = function(grunt) {
     grunt.file.write(localTmp + '/ant/build.xml', buildFile);
 
     var packageXml = buildPackageXml(null, options.apiVersion);
-    grunt.file.write(localTmp + '/src/package.xml', packageXml);
+    grunt.file.write(options.root + '/package.xml', packageXml);
 
     var destructiveXml = buildPackageXml(this.data.pkg, options.apiVersion);
-    grunt.file.write(localTmp + '/src/destructiveChanges.xml', destructiveXml);
+    grunt.file.write(options.root + '/destructiveChanges.xml', destructiveXml);
 
     runAnt('deploy', target, function(err, result) {
       clearLocalTmp();
