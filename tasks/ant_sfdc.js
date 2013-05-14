@@ -379,7 +379,7 @@ module.exports = function(grunt) {
 
     options.resultFilePath = localTmp + '/list.log';
 
-    grunt.log.writeln('ListMetadata Target -> ' + target);
+    grunt.log.writeln('ListMetadata (' + options.metadataType + ') Target -> ' + target);
 
     parseAuth(options, target);
 
@@ -408,8 +408,8 @@ module.exports = function(grunt) {
             var valsplit = val.split('/');
             // start of a new md section
             if(prop === 'FileName') {
-              if(!jsonData[valsplit[0]]) jsonData[valsplit[0]] = [];
-              currentType = valsplit[0];
+              if(!jsonData[options.metadataType]) jsonData[options.metadataType] = [];
+              currentType = options.metadataType;
               
               if(!md) md = {};
               md.FileName = val;
