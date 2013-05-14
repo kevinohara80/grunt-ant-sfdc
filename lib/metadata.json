@@ -161,7 +161,7 @@
   },
   "folder": {
     "xmlType": "Folder",
-    "folder": "documents,email,reports,ordashboards",
+    "folder": ["documents","email","reports","dashboards"],
     "allowStar": false
   },
   "group": {
