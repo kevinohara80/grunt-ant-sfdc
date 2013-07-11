@@ -46,7 +46,9 @@ function lookupMetadata(key) {
 module.exports = function(grunt) {
 
   function clearLocalTmp() {
-    grunt.file.delete(localTmp, { force: true });
+    if(grunt.file.exists(localTmp)) {
+      grunt.file.delete(localTmp, { force: true });
+    }
   }
 
   function makeLocalTmp() {
