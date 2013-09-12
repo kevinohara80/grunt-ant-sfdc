@@ -5,6 +5,8 @@
       username="<%= user %>" 
       password="<%= pass %>" 
       serverurl="<%= serverurl %>" 
+      maxPoll="<%= maxPoll %>" 
+      pollWaitMillis="<%= pollWaitMillis %>" 
       apiVersion="<%= apiVersion %>"
       retrieveTarget="<%= retrieveTarget %>"
       unpackaged="<%= unpackaged %>"
