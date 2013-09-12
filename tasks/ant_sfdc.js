@@ -91,7 +91,7 @@ module.exports = function(grunt) {
     }, function(error, result, code) {
       grunt.log.debug(String(result.stdout));
       if(error) {
-        grunt.log.error(error);
+        grunt.fail.warn(error, code);
       } else {
         grunt.log.ok(task + ' target ' + target + ' successful');
       }
