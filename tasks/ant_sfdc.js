@@ -85,17 +85,22 @@ module.exports = function(grunt) {
     args.push(task);
     grunt.log.debug('ANT CMD: ant ' + args.join(' '));
     grunt.log.writeln('Starting ANT ' + task + '...');
-    grunt.util.spawn({
+    var ant = grunt.util.spawn({
       cmd: 'ant',
       args: args
     }, function(error, result, code) {
-      grunt.log.debug(String(result.stdout));
       if(error) {
         grunt.log.error(error);
       } else {
         grunt.log.ok(task + ' target ' + target + ' successful');
       }
       done(error, result);
+    });
+    ant.stdout.on('data', function(data) {
+      grunt.log.write(data);
+    });
+    ant.stderr.on('data', function(data) {
+      grunt.log.error(data);
     });
   }
 
