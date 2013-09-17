@@ -40,6 +40,16 @@ Type: `String`
 Default value: `'https://login.salesforce.com'`
 This option sets the api version to use for the package deployment
 
+#### options.pollWaitMillis
+Type: `Integer`
+Default value: `10000`
+This option sets the number of milliseconds to wait between polls for retrieve/deploy results.
+
+#### options.maxPoll
+Type: `Integer`
+Default value: `20`
+This option sets the number of polling attempts to be performed before aborting.
+
 #### options.apiVersion
 Type: `String`
 Default value: `'27.0'`
