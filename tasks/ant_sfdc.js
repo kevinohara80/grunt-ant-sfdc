@@ -90,7 +90,7 @@ module.exports = function(grunt) {
       args: args
     }, function(error, result, code) {
       if(error) {
-        grunt.log.error(error);
+        grunt.fail.warn(error, code);
       } else {
         grunt.log.ok(task + ' target ' + target + ' successful');
       }
