@@ -90,10 +90,10 @@ Type: `String`
 Default value: `'build/'`
 The root options sets the base directory where metadata lives
 
-#### options.checkonly
+#### options.checkOnly
 Type: `Boolean`
 Default value: `false`
-This option sets whether this is a checkonly deploy or not
+This option sets whether this is a checkOnly deploy or not
 
 #### options.runAllTests
 Type: `Boolean`
