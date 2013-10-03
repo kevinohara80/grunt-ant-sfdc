@@ -303,5 +303,25 @@
     "xmlType": "Workflow",
     "folder": "workflows",
     "allowStar": true
+  },
+  "workflowrule": {
+    "xmlType": "WorkflowRule",
+    "folder": "workflows",
+    "allowStar": false
+  },
+  "workflowfieldupdate": {
+    "xmlType": "WorkflowFieldUpdate",
+    "folder": "workflows",
+    "allowStar": false
+  },
+  "workflowalert": {
+    "xmlType": "WorkflowAlert",
+    "folder": "workflows",
+    "allowStar": false
+  },
+  "workflowtask": {
+    "xmlType": "WorkflowTask",
+    "folder": "workflows",
+    "allowStar": false
   }
 }
