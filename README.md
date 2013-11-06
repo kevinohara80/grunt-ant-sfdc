@@ -52,7 +52,7 @@ This option sets the number of polling attempts to be performed before aborting.
 
 #### options.apiVersion
 Type: `String`
-Default value: `'27.0'`
+Default value: `'29.0'`
 This option sets the api version to use for the package deployment
 
 #### options.useEnv
