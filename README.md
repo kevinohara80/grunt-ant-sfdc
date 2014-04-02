@@ -105,6 +105,11 @@ Type: `Boolean`
 Default value: `true`
 This option sets whether or not to roll back changes on test error
 
+#### options.existingPackage
+Type: `Boolean`
+Default value: `false`
+This option will tell the task to assume a package.xml file exists in the `root` folder. If this option is `true` the `pkg` data provided to the task will be ignored and a new package.xml file will not be generated. This allows you to reuse a package.xml file that may be present in your project.
+
 ### Usage Examples
 
 #### Single Org Deploy
