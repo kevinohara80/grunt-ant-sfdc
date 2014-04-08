@@ -151,7 +151,8 @@ module.exports = function(grunt) {
       checkOnly: false,
       runAllTests: false,
       rollbackOnError: true,
-      useEnv: false
+      useEnv: false,
+      existingPackage: false
     });
 
     grunt.log.writeln('Deploy Target -> ' + target);
@@ -163,8 +164,10 @@ module.exports = function(grunt) {
     var buildFile = grunt.template.process(template, { data: options });
     grunt.file.write(localTmp + '/ant/build.xml', buildFile);
 
-    var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
-    grunt.file.write(options.root + '/package.xml', packageXml);
+    if (!options.existingPackage) {
+      var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
+      grunt.file.write(options.root + '/package.xml', packageXml);
+    }
 
     runAnt('deploy', target, function(err, result) {
       clearLocalTmp();
