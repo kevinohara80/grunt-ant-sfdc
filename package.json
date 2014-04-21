@@ -1,7 +1,7 @@
 {
   "name": "grunt-ant-sfdc",
   "description": "Add salesforce and force.com ANT tasks to your grunt builds",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "homepage": "https://github.com/kevinohara80/grunt-ant-sfdc",
   "author": {
     "name": "Kevin O'Hara",
