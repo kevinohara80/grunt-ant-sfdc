@@ -200,13 +200,18 @@ The root option sets the base directory where metadata lives
 
 #### options.retrieveTarget
 Type: `String`
-Default value: `'27.0'`
+Default value: `root`
 This sets the target directory for the retrieve. This will default to the `root` if not set.
 
 #### options.unzip
 Type: `Boolean`
 Default value: `true`
 This set whether or not the retrieve should be unzipped upon completion
+
+#### options.existingPackage
+Type: `Boolean`
+Default value: `false`
+This option will tell the task to assume a package.xml file exists in the `root` folder. If this option is `true` the `pkg` data provided to the task will be ignored and a new package.xml file will not be generated. This allows you to reuse a package.xml file that may be present in your project.
 
 ### Usage Examples
 
@@ -218,7 +223,7 @@ grunt.initConfig({
   antretrieve: {
     options: {
       user: 'myusername@gmail.com',
-      pass: 'mypass' 
+      pass: 'mypass'
     },
     // specify one retrieve target
     dev1: {

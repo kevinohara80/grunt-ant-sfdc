@@ -22,7 +22,6 @@ function lookupMetadata(key) {
     typeName = metadata[key].xmlType;
   } else {
     // try to match on folder
-    var typeName;
     Object.keys(metadata).forEach(function(mk) {
       var folder = metadata[mk].folder;
       if(typeof folder === 'string' && folder.toLowerCase() === key) {
@@ -54,18 +53,18 @@ module.exports = function(grunt) {
   function makeLocalTmp() {
     clearLocalTmp();
     grunt.file.mkdir(localTmp);
-    grunt.file.mkdir(localTmp + '/ant');
-    grunt.file.mkdir(localTmp + '/src');
+    grunt.file.mkdir(path.join(localTmp,'/ant'));
+    grunt.file.mkdir(path.join(localTmp,'/src'));
   }
 
   function parseAuth(options, target) {
     var un = (!options.useEnv) ? options.user  : process.env.SFUSER;
     var pw = (!options.useEnv) ? options.pass  : process.env.SFPASS;
     var tk = (!options.useEnv) ? options.token : process.env.SFTOKEN;
-    if(tk) pw += tk;
+    if(tk) {pw += tk;}
     if(!un) { grunt.log.error('no username specified for ' + target); }
     if(!pw) { grunt.log.error('no password specified for ' + target); }
-    if(!un || !pw) grunt.fail.warn('username/password error');
+    if(!un || !pw) {grunt.fail.warn('username/password error');}
     options.user = un;
     options.pass = pw;
     if(options.useEnv && process.env.SFSERVERURL) {
@@ -77,7 +76,7 @@ module.exports = function(grunt) {
   function runAnt(task, target, done) {
     var args =  [
       '-buildfile',
-      localTmp + '/ant/build.xml',
+      path.join(localTmp,'/ant/build.xml'),
       '-lib',
       localLib,
       '-Dbasedir='     + process.cwd()
@@ -110,7 +109,7 @@ module.exports = function(grunt) {
       '<Package xmlns="http://soap.sforce.com/2006/04/metadata">'
     ];
     if(pkg) {
-      Object.keys(pkg).forEach(function(key) {  
+      Object.keys(pkg).forEach(function(key) {
         var type = pkg[key];
         var typeName = lookupMetadata(key);
         if(!typeName) { grunt.fail.fatal(key + ' is not a valid metadata type'); }
@@ -130,20 +129,20 @@ module.exports = function(grunt) {
   /*************************************
    * antdeploy task
    *************************************/
-  
+
   grunt.registerMultiTask('antdeploy', 'Run ANT deploy to Salesforce', function() {
 
     makeLocalTmp();
 
     var done = this.async();
     var target = this.target.green;
-    var template = grunt.file.read(localAnt + '/antdeploy.build.xml');
+    var template = grunt.file.read(path.join(localAnt,'/antdeploy.build.xml'));
 
     var options = this.options({
       user: false,
       pass: false,
       token: false,
-      root: 'build',
+      root: './build',
       apiVersion: '29.0',
       serverurl: 'https://login.salesforce.com',
       pollWaitMillis: 10000,
@@ -159,14 +158,16 @@ module.exports = function(grunt) {
 
     parseAuth(options, target);
 
+    options.root = path.normalize(options.root);
+
     options.tests = this.data.tests || [];
 
     var buildFile = grunt.template.process(template, { data: options });
-    grunt.file.write(localTmp + '/ant/build.xml', buildFile);
+    grunt.file.write(path.join(localTmp,'/ant/build.xml'), buildFile);
 
     if (!options.existingPackage) {
       var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
-      grunt.file.write(options.root + '/package.xml', packageXml);
+      grunt.file.write(path.join(options.root,'/package.xml'), packageXml);
     }
 
     runAnt('deploy', target, function(err, result) {
@@ -186,13 +187,13 @@ module.exports = function(grunt) {
 
     var done = this.async();
     var target = this.target.green;
-    var template = grunt.file.read(localAnt + '/antdeploy.build.xml');
+    var template = grunt.file.read(path.join(localAnt,'/antdeploy.build.xml'));
 
     var options = this.options({
       user: false,
       pass: false,
       token: false,
-      root: 'build',
+      root: './build',
       apiVersion: '29.0',
       serverurl: 'https://login.salesforce.com',
       pollWaitMillis: 10000,
@@ -207,16 +208,18 @@ module.exports = function(grunt) {
 
     parseAuth(options, target);
 
+    options.root = path.normalize(options.root);
+
     options.tests = this.data.tests || [];
 
     var buildFile = grunt.template.process(template, { data: options });
-    grunt.file.write(localTmp + '/ant/build.xml', buildFile);
+    grunt.file.write(path.join(localTmp,'/ant/build.xml'), buildFile);
 
-    var packageXml = buildPackageXml(null, options.apiVersion);
-    grunt.file.write(options.root + '/package.xml', packageXml);
+    var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
+    grunt.file.write(path.join(options.root,'/package.xml'), packageXml);
 
     var destructiveXml = buildPackageXml(this.data.pkg, options.apiVersion);
-    grunt.file.write(options.root + '/destructiveChanges.xml', destructiveXml);
+    grunt.file.write(path.join(options.root,'/destructiveChanges.xml'), destructiveXml);
 
     runAnt('deploy', target, function(err, result) {
       clearLocalTmp();
@@ -235,32 +238,43 @@ module.exports = function(grunt) {
 
     var done = this.async();
     var target = this.target.green;
-    var template = grunt.file.read(localAnt + '/antretrieve.build.xml');
+    var template = grunt.file.read(path.join(localAnt,'/antretrieve.build.xml'));
 
     var options = this.options({
       user: false,
       pass: false,
       token: false,
-      root: 'build',
+      root: './build',
       apiVersion: '29.0',
       serverurl: 'https://login.salesforce.com',
       retrieveTarget: false,
       unzip: true,
-      useEnv: false
+      useEnv: false,
+      existingPackage: false
     });
 
     grunt.log.writeln('Retrieve Target -> ' + target);
 
     parseAuth(options, target);
 
-    options.unpackaged = localTmp + '/package.xml';
-    if(!options.retrieveTarget) options.retrieveTarget = options.root;
+    options.root = path.normalize(options.root);
+
+    options.unpackaged = path.join(localTmp,'/package.xml');
+    if(!options.retrieveTarget) {options.retrieveTarget = options.root;}
 
     var buildFile = grunt.template.process(template, { data: options });
-    grunt.file.write(localTmp + '/ant/build.xml', buildFile);
+    grunt.file.write(path.join(localTmp,'/ant/build.xml'), buildFile);
 
-    var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
-    grunt.file.write(localTmp + '/package.xml', packageXml);
+    if (!options.existingPackage) {
+        var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
+        grunt.file.write(path.join(options.root,'/package.xml'), packageXml);
+    } else {
+      if(grunt.file.exists(options.root,'/package.xml')){
+        grunt.file.copy(path.join(options.root,'/package.xml'), path.join(localTmp,'/package.xml'));
+      } else {
+        grunt.log.error('No Package.xml file found in ' + options.root);
+      }
+    }
 
     runAnt('retrieve', target, function(err, result) {
       clearLocalTmp();
@@ -274,12 +288,12 @@ module.exports = function(grunt) {
    *************************************/
 
   grunt.registerMultiTask('antdescribe', 'Describe all metadata types for an org', function() {
-    
+
     makeLocalTmp();
 
     var done = this.async();
     var target = this.target.green;
-    var template = grunt.file.read(localAnt + '/antdescribe.build.xml');
+    var template = grunt.file.read(path.join(localAnt,'/antdescribe.build.xml'));
 
     var options = this.options({
       user: false,
@@ -293,16 +307,16 @@ module.exports = function(grunt) {
       useEnv: false
     });
 
-    var finalDest = options.resultFilePath;
+    var finalDest = path.normalize(options.resultFilePath);
 
-    options.resultFilePath = localTmp + '/list.log';
+    options.resultFilePath = path.join(localTmp,'/list.log');
 
     grunt.log.writeln('Describe Target -> ' + target);
 
     parseAuth(options, target);
 
     var buildFile = grunt.template.process(template, { data: options });
-    grunt.file.write(localTmp + '/ant/build.xml', buildFile);
+    grunt.file.write(path.join(localTmp,'/ant/build.xml'), buildFile);
 
     grunt.file.write(options.resultFilePath);
 
@@ -313,7 +327,7 @@ module.exports = function(grunt) {
         grunt.log.writeln('parsing response to json');
         var logFile = grunt.file.read(options.resultFilePath);
         var lines = logFile.split('\n');
-        
+
         var jsonData = {};
         var currentType = 'types';
         var md;
@@ -340,14 +354,14 @@ module.exports = function(grunt) {
                 val = [];
               }
             } else {
-              if(val === 'false') val = false;
-              if(val === 'true') val = true;
+              if(val === 'false') {val = false;}
+              if(val === 'true') {val = true;}
             }
-            if(!md) md = {};
+            if(!md) {md = {};}
             md[prop] = val;
           } else {
             if(md && currentType) {
-              if(!jsonData[currentType]) jsonData[currentType] = [];
+              if(!jsonData[currentType]) {jsonData[currentType] = [];}
               jsonData[currentType].push(grunt.util._.clone(md));
               md = null;
             }
@@ -357,7 +371,7 @@ module.exports = function(grunt) {
       } else {
         grunt.file.copy(options.resultFilePath, finalDest);
       }
-      clearLocalTmp()
+      clearLocalTmp();
       done();
     });
 
@@ -368,12 +382,12 @@ module.exports = function(grunt) {
    *************************************/
 
    grunt.registerMultiTask('antlist', 'List metadata for a certain type', function() {
-    
+
     makeLocalTmp();
 
     var done = this.async();
     var target = this.target.green;
-    var template = grunt.file.read(localAnt + '/antlist.build.xml');
+    var template = grunt.file.read(path.join(localAnt,'/antlist.build.xml'));
 
     var options = this.options({
       user: false,
@@ -389,16 +403,16 @@ module.exports = function(grunt) {
       useEnv: false
     });
 
-    var finalDest = options.resultFilePath;
+    var finalDest = path.normalize(options.resultFilePath);
 
-    options.resultFilePath = localTmp + '/list.log';
+    options.resultFilePath = path.join(localTmp,'/list.log');
 
     grunt.log.writeln('ListMetadata (' + options.metadataType + ') Target -> ' + target);
 
     parseAuth(options, target);
 
     var buildFile = grunt.template.process(template, { data: options });
-    grunt.file.write(localTmp + '/ant/build.xml', buildFile);
+    grunt.file.write(path.join(localTmp,'/ant/build.xml'), buildFile);
 
     grunt.file.write(options.resultFilePath);
 
@@ -409,7 +423,7 @@ module.exports = function(grunt) {
         grunt.log.writeln('parsing response to json');
         var logFile = grunt.file.read(options.resultFilePath);
         var lines = logFile.split('\n');
-        
+
         var jsonData = {};
         var currentType;
         var md;
@@ -422,10 +436,10 @@ module.exports = function(grunt) {
             var valsplit = val.split('/');
             // start of a new md section
             if(prop === 'FileName') {
-              if(!jsonData[options.metadataType]) jsonData[options.metadataType] = [];
+              if(!jsonData[options.metadataType]) {jsonData[options.metadataType] = [];}
               currentType = options.metadataType;
-              
-              if(!md) md = {};
+
+              if(!md) {md = {};}
               md.FileName = val;
 
             } else if(prop === 'FullName/Id') {
@@ -437,17 +451,17 @@ module.exports = function(grunt) {
             } else if(prop === 'Namespace Prefix') {
               md.NamespacePrefix = val;
             } else if(prop === 'Created By (Name/Id)') {
-              if(!md.CreatedBy) md.CreatedBy = {};
+              if(!md.CreatedBy) {md.CreatedBy = {};}
               md.CreatedBy.Name = valsplit[0];
               md.CreatedBy.Id = valsplit[1];
             } else if(prop === 'Last Modified By (Name/Id)') {
-              if(!md.LastModifiedBy) md.LastModifiedBy = {};
+              if(!md.LastModifiedBy) {md.LastModifiedBy = {};}
               md.LastModifiedBy.Name = valsplit[0];
               md.LastModifiedBy.Id = valsplit[1];
             }
           } else {
             if(md && currentType) {
-              if(!jsonData[currentType]) jsonData[currentType] = [];
+              if(!jsonData[currentType]) {jsonData[currentType] = [];}
               jsonData[currentType].push(grunt.util._.clone(md));
               md = null;
             }
@@ -457,7 +471,7 @@ module.exports = function(grunt) {
       } else {
         grunt.file.copy(options.resultFilePath, finalDest);
       }
-      clearLocalTmp()
+      clearLocalTmp();
       done();
     });
 
