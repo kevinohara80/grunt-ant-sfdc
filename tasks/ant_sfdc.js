@@ -167,15 +167,10 @@ module.exports = function(grunt) {
     var buildFile = grunt.template.process(template, { data: options });
     grunt.file.write(localTmp + '/ant/build.xml', buildFile);
 
-<<<<<<< HEAD
     if (!options.existingPackage) {
       var packageXml = buildPackageXml(this.data.pkg, this.data.pkgName, options.apiVersion);
       grunt.file.write(options.root + '/package.xml', packageXml);
     }
-=======
-    var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
-    grunt.file.write(options.root + '/package.xml', packageXml);
->>>>>>> 1cedd409d5d81ffc1bc4615646e3fa4ae57a9d88
 
     runAnt('deploy', target, function(err, result) {
       clearLocalTmp();
