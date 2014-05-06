@@ -104,11 +104,14 @@ module.exports = function(grunt) {
     });
   }
 
-  function buildPackageXml(pkg, version) {
+  function buildPackageXml(pkg, pkgName, version) {
     var packageXml = [
       '<?xml version="1.0" encoding="UTF-8"?>',
       '<Package xmlns="http://soap.sforce.com/2006/04/metadata">'
     ];
+    if(pkgName) {
+      packageXml.push('    <fullName>' + pkgName + '</fullName>');
+    }
     if(pkg) {
       Object.keys(pkg).forEach(function(key) {  
         var type = pkg[key];
@@ -164,10 +167,15 @@ module.exports = function(grunt) {
     var buildFile = grunt.template.process(template, { data: options });
     grunt.file.write(localTmp + '/ant/build.xml', buildFile);
 
+<<<<<<< HEAD
     if (!options.existingPackage) {
-      var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
+      var packageXml = buildPackageXml(this.data.pkg, this.data.pkgName, options.apiVersion);
       grunt.file.write(options.root + '/package.xml', packageXml);
     }
+=======
+    var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
+    grunt.file.write(options.root + '/package.xml', packageXml);
+>>>>>>> 1cedd409d5d81ffc1bc4615646e3fa4ae57a9d88
 
     runAnt('deploy', target, function(err, result) {
       clearLocalTmp();
@@ -259,7 +267,7 @@ module.exports = function(grunt) {
     var buildFile = grunt.template.process(template, { data: options });
     grunt.file.write(localTmp + '/ant/build.xml', buildFile);
 
-    var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
+    var packageXml = buildPackageXml(this.data.pkg, this.data.pkgName, options.apiVersion);
     grunt.file.write(localTmp + '/package.xml', packageXml);
 
     runAnt('retrieve', target, function(err, result) {
