@@ -4,6 +4,16 @@
     "folder": "opportunitySharingRules",
     "allowStar": true
   },
+  "corswhitelistorigins": {
+    "xmlType": "corsWhitelistOrigins",
+    "folder": "corsWhitelistOrigins",
+    "allowStar": true
+  },
+  "quickactions": {
+    "xmlType": "quickActions",
+    "folder": "quickActions",
+    "allowStar": true
+  },
   "ownerrules": {
     "xmlType": "ownerRules",
     "folder": "opportunitySharingRules",
