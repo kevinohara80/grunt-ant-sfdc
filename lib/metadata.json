@@ -54,6 +54,11 @@
     "folder": "triggers",
     "allowStar": true
   },
+  "approvalprocess": {
+    "xmlType": "ApprovalProcess",
+    "folder": "approvalProcesses",
+    "allowStar": true
+  },
   "assignmentrules": {
     "xmlType": "AssignmentRules",
     "folder": "assignmentRules",
