@@ -2,8 +2,12 @@
 
   <target name="retrieve">
     <sf:retrieve 
+      <% if(sessionid) { %> 
+      sessionId="<%= sessionid %>"
+      <% } else { %>
       username="<%= user %>" 
-      password="<%= pass %>" 
+      password="<%= pass %>"
+      <% } %>
       serverurl="<%= serverurl %>" 
       maxPoll="<%= maxPoll %>" 
       pollWaitMillis="<%= pollWaitMillis %>" 

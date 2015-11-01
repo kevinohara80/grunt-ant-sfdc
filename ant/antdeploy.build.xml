@@ -2,8 +2,12 @@
 
   <target name="deploy">
     <sf:deploy 
+      <% if(sessionid) { %> 
+      sessionId="<%= sessionid %>"
+      <% } else { %>
       username="<%= user %>" 
-      password="<%= pass %>" 
+      password="<%= pass %>"
+      <% } %>
       serverurl="<%= serverurl %>" 
       maxPoll="<%= maxPoll %>" 
       pollWaitMillis="<%= pollWaitMillis %>" 

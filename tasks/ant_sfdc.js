@@ -58,19 +58,45 @@ module.exports = function(grunt) {
   }
 
   function parseAuth(options, target) {
-    var un = (!options.useEnv) ? options.user  : process.env.SFUSER;
-    var pw = (!options.useEnv) ? options.pass  : process.env.SFPASS;
-    var tk = (!options.useEnv) ? options.token : process.env.SFTOKEN;
-    if(tk) {pw += tk;}
-    if(!un) { grunt.log.error('no username specified for ' + target); }
-    if(!pw) { grunt.log.error('no password specified for ' + target); }
-    if(!un || !pw) {grunt.fail.warn('username/password error');}
-    options.user = un;
-    options.pass = pw;
-    if(options.useEnv && process.env.SFSERVERURL) {
-      options.serverurl = process.env.SFSERVERURL;
+    if (options.sessionConfig) {
+      parseAuthMavensMate(options);
     }
-    grunt.log.writeln('User -> ' + options.user.green);
+    if (options.useEnv) {
+      parseAuthEnv(options);
+    }
+    validateAuth(options);
+    if (options.user) {
+      grunt.log.writeln('User -> ' + options.user.green);
+    } else {
+      grunt.log.writeln('Server -> ' + options.serverurl.green);
+    }
+
+    function parseAuthMavensMate(options) {
+      if (options.sessionConfig.accessToken && options.sessionConfig.instanceUrl) {
+        options.sessionid = options.sessionConfig.accessToken;
+        options.serverurl = options.sessionConfig.instanceUrl;
+      }
+    }
+
+    function parseAuthEnv(options) {
+      options.user = process.env.SFUSER || false;
+      options.pass = process.env.SFPASS || false;
+      options.token = process.env.SFTOKEN || false;
+      options.sessionid = process.env.SESSIONID || false;
+      options.serverurl = process.env.SFSERVERURL || false;
+    }
+
+    function validateAuth(options) {
+      var un = options.user;
+      var pw = options.pass;
+      var tk = options.token;
+      var sid = options.sessionid;
+      var url = options.serverurl;
+      if(tk) {pw += tk;}
+      if(!un && !(sid && url)) { grunt.log.error('no username specified for ' + target); }
+      if(!pw && !(sid && url)) { grunt.log.error('no password specified for ' + target); }
+      if(!(sid && url) && !(un || pw)) {grunt.fail.warn('username/password error');}
+    }
   }
 
   function runAnt(task, target, done) {
@@ -145,6 +171,7 @@ module.exports = function(grunt) {
       user: false,
       pass: false,
       token: false,
+      sessionid: false,
       root: './build',
       apiVersion: '29.0',
       serverurl: 'https://login.salesforce.com',
@@ -197,6 +224,7 @@ module.exports = function(grunt) {
       user: false,
       pass: false,
       token: false,
+      sessionid: false,
       root: './build',
       apiVersion: '29.0',
       serverurl: 'https://login.salesforce.com',
@@ -248,6 +276,7 @@ module.exports = function(grunt) {
       user: false,
       pass: false,
       token: false,
+      sessionid: false,
       root: './build',
       apiVersion: '29.0',
       serverurl: 'https://login.salesforce.com',
@@ -303,6 +332,7 @@ module.exports = function(grunt) {
       user: false,
       pass: false,
       token: false,
+      sessionid: false,
       apiVersion: '29.0',
       serverurl: 'https://login.salesforce.com',
       resultFilePath: '',
@@ -397,6 +427,7 @@ module.exports = function(grunt) {
       user: false,
       pass: false,
       token: false,
+      sessionid: false,
       apiVersion: '29.0',
       serverurl: 'https://login.salesforce.com',
       resultFilePath: '',
