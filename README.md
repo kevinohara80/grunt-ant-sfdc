@@ -35,6 +35,10 @@ Your Salesforce.com password
 Type: `String`
 Your Salesforce.com password
 
+#### options.sessionid
+Type: `String`
+Your Salesforce.com session id
+
 #### options.serverurl
 Type: `String`
 Default value: `'https://login.salesforce.com'`
@@ -59,6 +63,11 @@ This option sets the api version to use for the package deployment
 Type: `Boolean`
 Default value: `false`
 This option will tell the task to look in environment variables for your Salesforce authentication details. This is really handy for making things secure and not having to put your login details in the Gruntfile. Make sure you set your username `SFUSER`, password `SFPASS`, and optionally your token `SFTOKEN`
+
+#### options.sessionConfig
+Type: `Object`
+Default value: `null`
+If you develop using sublime text and mavensmate then you can share your session data with the grunt-ant-sfdc plugin. Simply set your options configuration like so: `sessionConfig: grunt.file.readJSON('config/.session')`
 
 ## The "antdeploy" task
 
