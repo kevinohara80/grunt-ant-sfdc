@@ -10,6 +10,7 @@
 
 var path     = require('path');
 var metadata = require('../lib/metadata.json');
+var sfdcAuth = require('./sfdc-auth');
 var localTmp = path.resolve(__dirname, '../tmp');
 var localAnt = path.resolve(__dirname, '../ant');
 var localLib = path.resolve(__dirname, '../deps');
@@ -55,48 +56,6 @@ module.exports = function(grunt) {
     grunt.file.mkdir(localTmp);
     grunt.file.mkdir(path.join(localTmp,'/ant'));
     grunt.file.mkdir(path.join(localTmp,'/src'));
-  }
-
-  function parseAuth(options, target) {
-    if (options.sessionConfig) {
-      parseAuthMavensMate(options);
-    }
-    if (options.useEnv) {
-      parseAuthEnv(options);
-    }
-    validateAuth(options);
-    if (options.user) {
-      grunt.log.writeln('User -> ' + options.user.green);
-    } else {
-      grunt.log.writeln('Server -> ' + options.serverurl.green);
-    }
-
-    function parseAuthMavensMate(options) {
-      if (options.sessionConfig.accessToken && options.sessionConfig.instanceUrl) {
-        options.sessionid = options.sessionConfig.accessToken;
-        options.serverurl = options.sessionConfig.instanceUrl;
-      }
-    }
-
-    function parseAuthEnv(options) {
-      options.user = process.env.SFUSER || false;
-      options.pass = process.env.SFPASS || false;
-      options.token = process.env.SFTOKEN || false;
-      options.sessionid = process.env.SESSIONID || false;
-      options.serverurl = process.env.SFSERVERURL || false;
-    }
-
-    function validateAuth(options) {
-      var un = options.user;
-      var pw = options.pass;
-      var tk = options.token;
-      var sid = options.sessionid;
-      var url = options.serverurl;
-      if(tk) {pw += tk;}
-      if(!un && !(sid && url)) { grunt.log.error('no username specified for ' + target); }
-      if(!pw && !(sid && url)) { grunt.log.error('no password specified for ' + target); }
-      if(!(sid && url) && !(un || pw)) {grunt.fail.warn('username/password error');}
-    }
   }
 
   function runAnt(task, target, done) {
@@ -186,7 +145,7 @@ module.exports = function(grunt) {
 
     grunt.log.writeln('Deploy Target -> ' + target);
 
-    parseAuth(options, target);
+    sfdcAuth.parseAuth(options, target);
 
     options.root = path.normalize(options.root);
 
@@ -238,7 +197,7 @@ module.exports = function(grunt) {
 
     grunt.log.writeln('Destroy Target -> ' + target);
 
-    parseAuth(options, target);
+    sfdcAuth.parseAuth(options, target);
 
     options.root = path.normalize(options.root);
 
@@ -288,7 +247,7 @@ module.exports = function(grunt) {
 
     grunt.log.writeln('Retrieve Target -> ' + target);
 
-    parseAuth(options, target);
+    sfdcAuth.parseAuth(options, target);
 
     options.root = path.normalize(options.root);
 
@@ -347,7 +306,7 @@ module.exports = function(grunt) {
 
     grunt.log.writeln('Describe Target -> ' + target);
 
-    parseAuth(options, target);
+    sfdcAuth.parseAuth(options, target);
 
     var buildFile = grunt.template.process(template, { data: options });
     grunt.file.write(path.join(localTmp,'/ant/build.xml'), buildFile);
@@ -444,7 +403,7 @@ module.exports = function(grunt) {
 
     grunt.log.writeln('ListMetadata (' + options.metadataType + ') Target -> ' + target);
 
-    parseAuth(options, target);
+    sfdcAuth.parseAuth(options, target);
 
     var buildFile = grunt.template.process(template, { data: options });
     grunt.file.write(path.join(localTmp,'/ant/build.xml'), buildFile);
