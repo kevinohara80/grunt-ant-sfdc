@@ -17,10 +17,15 @@ auth.parseAuth = function(options, target) {
   }
 
   function parseAuthMavensMate(options) {
+	//MavensMate v5.x
     if (options.sessionConfig.accessToken && options.sessionConfig.instanceUrl) {
       options.sessionid = options.sessionConfig.accessToken;
       options.serverurl = options.sessionConfig.instanceUrl;
-    }
+    } else if (options.sessionConfig.sid && options.sessionConfig.server_url) {
+	  //MavensMate v4.x, or v.6.x
+	  options.sessionid = options.sessionConfig.sid;
+	  options.serverurl = options.sessionConfig.server_url.replace(/\.com.*/, '.com');
+	}
   }
 
   function parseAuthEnv(options) {
