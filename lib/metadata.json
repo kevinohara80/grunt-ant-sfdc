@@ -4,13 +4,18 @@
     "folder": "opportunitySharingRules",
     "allowStar": true
   },
+  "auradefinitionbundle": {
+    "xmlType": "AuraDefinitionBundle",
+    "folder": "aura",
+    "allowStar": true
+  },
   "corswhitelistorigins": {
-    "xmlType": "corsWhitelistOrigins",
+    "xmlType": "CorsWhitelistOrigin",
     "folder": "corsWhitelistOrigins",
     "allowStar": true
   },
   "quickactions": {
-    "xmlType": "quickActions",
+    "xmlType": "QuickAction",
     "folder": "quickActions",
     "allowStar": true
   },
