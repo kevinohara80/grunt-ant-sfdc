@@ -2,8 +2,12 @@
 
   <target name="listmetadata">
     <sf:listMetadata 
+      <% if(sessionid) { %> 
+      sessionId="<%= sessionid %>"
+      <% } else { %>
       username="<%= user %>" 
-      password="<%= pass %>" 
+      password="<%= pass %>"
+      <% } %>
       serverurl="<%= serverurl %>" 
       apiVersion="<%= apiVersion %>"
       folder="<%= folder %>"

@@ -2,8 +2,12 @@
 
   <target name="describe">
     <sf:describeMetadata 
+      <% if(sessionid) { %> 
+      sessionId="<%= sessionid %>"
+      <% } else { %>
       username="<%= user %>" 
-      password="<%= pass %>" 
+      password="<%= pass %>"
+      <% } %>
       serverurl="<%= serverurl %>" 
       apiVersion="<%= apiVersion %>"
       resultFilePath="<%= resultFilePath %>"
