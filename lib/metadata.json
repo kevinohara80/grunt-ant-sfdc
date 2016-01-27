@@ -109,6 +109,11 @@
     "folder": "labels",
     "allowStar": true
   },
+  "custommetadata": {
+    "xmlType": "CustomMetadata",
+    "folder": "customMetadata",
+    "allowStar": true
+  },
   "customobject": {
     "xmlType": "CustomObject",
     "folder": "objects",
