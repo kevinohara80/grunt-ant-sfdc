@@ -3,14 +3,14 @@ var grunt = require('grunt');
 var auth = module.exports = {};
 
 auth.parseAuth = function(options, target) {
-  if (options.sessionConfig) {
+  if(options.sessionConfig) {
     parseAuthMavensMate(options);
   }
   if(options.useEnv) {
     parseAuthEnv(options);
   }
   validateAuth(options);
-  if (options.user) {
+  if(options.user) {
     grunt.log.writeln('User -> ' + options.user.green);
   } else if (options.serverurl) {
     grunt.log.writeln('Server -> ' + options.serverurl.green);
