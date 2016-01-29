@@ -6,7 +6,7 @@ auth.parseAuth = function(options, target) {
   if (options.sessionConfig) {
     parseAuthMavensMate(options);
   }
-  if (options.useEnv) {
+  if(options.useEnv) {
     parseAuthEnv(options);
   }
   validateAuth(options);
@@ -29,11 +29,11 @@ auth.parseAuth = function(options, target) {
   }
 
   function parseAuthEnv(options) {
-    options.user = process.env.SFUSER || false;
-    options.pass = process.env.SFPASS || false;
-    options.token = process.env.SFTOKEN || false;
-    options.sessionid = process.env.SFSESSIONID || false;
-    options.serverurl = process.env.SFSERVERURL || false;
+    options.user = process.env.SFUSER || options.user;
+    options.pass = process.env.SFPASS || options.pass;
+    options.token = process.env.SFTOKEN || options.token;
+    options.sessionid = process.env.SFSESSIONID || options.sessionid;
+    options.serverurl = process.env.SFSERVERURL || options.serverurl;
   }
 
   function validateAuth(options) {
