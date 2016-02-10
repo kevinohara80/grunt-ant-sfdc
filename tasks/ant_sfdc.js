@@ -259,7 +259,9 @@ module.exports = function(grunt) {
 
     if (!options.existingPackage) {
       var packageXml = buildPackageXml(this.data.pkg, this.data.pkgName, options.apiVersion);
-      grunt.file.write(path.join(options.root,'/package.xml'), packageXml);
+      var rootPackagePath = path.join(options.root,'/package.xml');
+      grunt.file.write(rootPackagePath, packageXml);
+      grunt.file.copy(rootPackagePath, path.join(localTmp,'/package.xml'));
     } else {
       if(grunt.file.exists(options.root,'/package.xml')){
         grunt.file.copy(path.join(options.root,'/package.xml'), path.join(localTmp,'/package.xml'));
