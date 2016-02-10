@@ -320,7 +320,7 @@
     "allowStar": true
   },
   "weblink": {
-    "xmlType": "Weblink",
+    "xmlType": "WebLink",
     "folder": "objects",
     "allowStar": false
   },
