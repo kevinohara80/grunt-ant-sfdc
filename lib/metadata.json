@@ -344,6 +344,11 @@
     "folder": "workflows",
     "allowStar": false
   },
+  "workflowflowaction": {
+    "xmlType": "WorkflowFlowAction",
+    "folder": "workflows",
+    "allowStar": false
+  },
   "workflowtask": {
     "xmlType": "WorkflowTask",
     "folder": "workflows",
