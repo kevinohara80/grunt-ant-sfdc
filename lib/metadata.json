@@ -184,6 +184,11 @@
     "folder": "flows",
     "allowStar": true
   },
+  "flowdefinition": {
+    "xmlType": "FlowDefinition",
+    "folder": "flowDefinitions",
+    "allowStar": true
+  },
   "folder": {
     "xmlType": "Folder",
     "folder": ["documents","email","reports","dashboards"],
