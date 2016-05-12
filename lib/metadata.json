@@ -209,6 +209,11 @@
     "folder": "homePageLayouts",
     "allowStar": true
   },
+  "installedpackage": {
+    "xmlType": "InstalledPackage",
+    "folder": "installedPackages",
+    "allowStar": true
+  },
   "letterhead": {
     "xmlType": "Letterhead",
     "folder": "letterhead",
