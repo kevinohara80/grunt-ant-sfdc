@@ -192,7 +192,8 @@ module.exports = function(grunt) {
       checkOnly: false,
       runAllTests: false,
       rollbackOnError: true,
-      useEnv: false
+      useEnv: false,
+      existingPackage: false
     });
 
     grunt.log.writeln('Destroy Target -> ' + target);
@@ -205,13 +206,15 @@ module.exports = function(grunt) {
 
     var buildFile = grunt.template.process(template, { data: options });
     grunt.file.write(path.join(localTmp,'/ant/build.xml'), buildFile);
-
-    var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
-    grunt.file.write(path.join(options.root,'/package.xml'), packageXml);
-
-    var destructiveXml = buildPackageXml(this.data.pkg, options.apiVersion);
-    grunt.file.write(path.join(options.root,'/destructiveChanges.xml'), destructiveXml);
-
+    
+    if (!options.existingPackage) {
+      var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
+      grunt.file.write(path.join(options.root,'/package.xml'), packageXml);
+  
+      var destructiveXml = buildPackageXml(this.data.pkg, options.apiVersion);
+      grunt.file.write(path.join(options.root,'/destructiveChanges.xml'), destructiveXml);
+    }
+    
     runAnt('deploy', target, function(err, result) {
       clearLocalTmp();
       done();
