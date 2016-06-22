@@ -139,6 +139,7 @@ module.exports = function(grunt) {
       checkOnly: false,
       runAllTests: false,
       rollbackOnError: true,
+      ignoreWarnings: false,
       useEnv: false,
       existingPackage: false
     });

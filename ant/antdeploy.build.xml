@@ -14,7 +14,8 @@
       deployroot="<%= root %>" 
       checkonly="<%= checkOnly %>" 
       runAllTests="<%= runAllTests %>"
-      rollbackOnError="<%= rollbackOnError %>">
+      rollbackOnError="<%= rollbackOnError %>"
+      ignoreWarnings="<%= ignoreWarnings %>">
       <% _.forEach(tests, function(t) { %><runTest><%= t %></runTest><% }); %>
     </sf:deploy>
   </target>
