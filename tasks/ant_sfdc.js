@@ -32,7 +32,9 @@ var antdeployOpts = {
   rollbackOnError: true,
   ignoreWarnings: false,
   useEnv: false,
-  existingPackage: false
+  existingPackage: false,
+  proxy_http: false,
+  proxy_port: 80
 }
 
 function lookupMetadata(key) {
@@ -236,7 +238,9 @@ module.exports = function(grunt) {
       retrieveTarget: false,
       unzip: true,
       useEnv: false,
-      existingPackage: false
+      existingPackage: false,
+      proxy_http: false,
+      proxy_port: 80
     });
 
     grunt.log.writeln('Retrieve Target -> ' + target);
@@ -293,7 +297,9 @@ module.exports = function(grunt) {
       resultFilePath: '',
       format: 'log',
       trace: false,
-      useEnv: false
+      useEnv: false,
+      proxy_http: false,
+      proxy_port: 80
     });
 
     var finalDest = path.normalize(options.resultFilePath);
@@ -390,7 +396,9 @@ module.exports = function(grunt) {
       folder: '',
       format: 'log',
       trace: false,
-      useEnv: false
+      useEnv: false,
+      proxy_http: false,
+      proxy_port: 80
     });
 
     var finalDest = path.normalize(options.resultFilePath);

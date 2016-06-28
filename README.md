@@ -71,6 +71,15 @@ Type: `Object`
 Default value: `null`
 If you develop using sublime text and mavensmate then you can share your session data with the grunt-ant-sfdc plugin. Simply set your options configuration like so: `sessionConfig: grunt.file.readJSON('config/.session')`
 
+#### options.proxy_http
+Type: `String`
+This options will set the proxyhost of ant before running any of the tasks. See https://ant.apache.org/manual/Tasks/setproxy.html
+
+#### options.proxy_port
+Type: `Integer`
+Default value: `80`
+This option will see the proxyport of ant befor running any of the tasks. If no `proxy_http` is set, then the port is not set. See https://ant.apache.org/manual/Tasks/setproxy.html
+
 ## The "antdeploy" task
 
 ### Overview
