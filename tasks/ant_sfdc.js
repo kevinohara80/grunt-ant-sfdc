@@ -139,6 +139,7 @@ module.exports = function(grunt) {
       checkOnly: false,
       runAllTests: false,
       rollbackOnError: true,
+      ignoreWarnings: false,
       useEnv: false,
       existingPackage: false
     });
@@ -155,7 +156,6 @@ module.exports = function(grunt) {
     grunt.file.write(path.join(localTmp,'/ant/build.xml'), buildFile);
 
     if (!options.existingPackage) {
-      var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
       var packageXml = buildPackageXml(this.data.pkg, this.data.pkgName, options.apiVersion);
       grunt.file.write(path.join(options.root,'/package.xml'), packageXml);
     }
@@ -192,6 +192,7 @@ module.exports = function(grunt) {
       checkOnly: false,
       runAllTests: false,
       rollbackOnError: true,
+      ignoreWarnings: false,
       useEnv: false
     });
 
@@ -206,10 +207,10 @@ module.exports = function(grunt) {
     var buildFile = grunt.template.process(template, { data: options });
     grunt.file.write(path.join(localTmp,'/ant/build.xml'), buildFile);
 
-    var packageXml = buildPackageXml(this.data.pkg, options.apiVersion);
+    var packageXml = buildPackageXml({}, this.data.pkgName, options.apiVersion);
     grunt.file.write(path.join(options.root,'/package.xml'), packageXml);
 
-    var destructiveXml = buildPackageXml(this.data.pkg, options.apiVersion);
+    var destructiveXml = buildPackageXml(this.data.pkg, this.data.pkgName, options.apiVersion);
     grunt.file.write(path.join(options.root,'/destructiveChanges.xml'), destructiveXml);
 
     runAnt('deploy', target, function(err, result) {
