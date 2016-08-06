@@ -10,8 +10,12 @@
       <% } %>
       serverurl="<%= serverurl %>" 
       maxPoll="<%= maxPoll %>" 
-      pollWaitMillis="<%= pollWaitMillis %>" 
+      pollWaitMillis="<%= pollWaitMillis %>"
+      <% if(zipFile) {%>
+      zipFile="<%= zipFile %>"
+      <% } else { %>
       deployroot="<%= root %>" 
+      <% } %>
       checkonly="<%= checkOnly %>" 
       runAllTests="<%= runAllTests %>"
       rollbackOnError="<%= rollbackOnError %>"
