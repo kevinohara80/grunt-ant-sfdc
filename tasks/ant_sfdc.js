@@ -132,6 +132,7 @@ module.exports = function(grunt) {
       token: false,
       sessionid: false,
       root: './build',
+	  zipFile: false,
       apiVersion: '29.0',
       serverurl: 'https://login.salesforce.com',
       pollWaitMillis: 10000,
@@ -471,6 +472,27 @@ module.exports = function(grunt) {
       clearLocalTmp();
       done();
     });
+
+  });
+
+  grunt.registerMultiTask('antpackage', 'Build package.xml for directory.', function() {
+
+    makeLocalTmp();
+
+    var done = this.async();
+    var target = this.target.green;
+
+    var options = this.options({
+      root: './build',
+      apiVersion: '29.0',
+    });
+
+    grunt.log.writeln('Building package.xml -> ' + options.root + '/package.xml');
+
+	var packageXml = buildPackageXml(this.data.pkg, this.data.pkgName, options.apiVersion);
+	grunt.file.write(path.join(options.root,'/package.xml'), packageXml);
+
+	done();
 
   });
 
