@@ -15,6 +15,26 @@ var localTmp = path.resolve(__dirname, '../tmp');
 var localAnt = path.resolve(__dirname, '../ant');
 var localLib = path.resolve(__dirname, '../deps');
 
+// Default options for ant deploy builds
+var antdeployOpts = {
+  user: false,
+  pass: false,
+  token: false,
+  sessionid: false,
+  root: './build',
+  zipFile: false,
+  apiVersion: '29.0',
+  serverurl: 'https://login.salesforce.com',
+  pollWaitMillis: 10000,
+  maxPoll: 20,
+  checkOnly: false,
+  runAllTests: false,
+  rollbackOnError: true,
+  ignoreWarnings: false,
+  useEnv: false,
+  existingPackage: false
+}
+
 function lookupMetadata(key) {
   key = key.toLowerCase();
   var typeName;
@@ -126,24 +146,7 @@ module.exports = function(grunt) {
     var target = this.target.green;
     var template = grunt.file.read(path.join(localAnt,'/antdeploy.build.xml'));
 
-    var options = this.options({
-      user: false,
-      pass: false,
-      token: false,
-      sessionid: false,
-      root: './build',
-	  zipFile: false,
-      apiVersion: '29.0',
-      serverurl: 'https://login.salesforce.com',
-      pollWaitMillis: 10000,
-      maxPoll: 20,
-      checkOnly: false,
-      runAllTests: false,
-      rollbackOnError: true,
-      ignoreWarnings: false,
-      useEnv: false,
-      existingPackage: false
-    });
+    var options = this.options(antdeployOpts);
 
     grunt.log.writeln('Deploy Target -> ' + target);
 
@@ -170,6 +173,10 @@ module.exports = function(grunt) {
 
   /*************************************
    * antdestroy task
+   * ---------------
+   * Just a special case of antdeploy.
+   * Generates an empty package.xml and a destructiveChanges.xml using the pkg option.
+   * This results in a destructive deployment only
    *************************************/
 
   grunt.registerMultiTask('antdestroy', 'Run ANT destructive changes to Salesforce', function() {
@@ -180,22 +187,7 @@ module.exports = function(grunt) {
     var target = this.target.green;
     var template = grunt.file.read(path.join(localAnt,'/antdeploy.build.xml'));
 
-    var options = this.options({
-      user: false,
-      pass: false,
-      token: false,
-      sessionid: false,
-      root: './build',
-      apiVersion: '29.0',
-      serverurl: 'https://login.salesforce.com',
-      pollWaitMillis: 10000,
-      maxPoll: 20,
-      checkOnly: false,
-      runAllTests: false,
-      rollbackOnError: true,
-      ignoreWarnings: false,
-      useEnv: false
-    });
+    var options = this.options(antdeployOpts);
 
     grunt.log.writeln('Destroy Target -> ' + target);
 
