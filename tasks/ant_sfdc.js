@@ -32,7 +32,8 @@ var antdeployOpts = {
   rollbackOnError: true,
   ignoreWarnings: false,
   useEnv: false,
-  existingPackage: false
+  existingPackage: false,
+  testLevel: "RunLocalTests"
 }
 
 function lookupMetadata(key) {
