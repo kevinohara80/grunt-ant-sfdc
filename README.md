@@ -1,5 +1,7 @@
 # grunt-ant-sfdc
 
+[![npm version](https://badge.fury.io/js/grunt-ant-sfdc.svg)](https://badge.fury.io/js/grunt-ant-sfdc)
+
 > Add salesforce and force.com ANT tasks to your grunt builds
 
 ## Getting Started
