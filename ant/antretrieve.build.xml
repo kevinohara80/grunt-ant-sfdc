@@ -16,7 +16,11 @@
       pollWaitMillis="<%= pollWaitMillis %>" 
       apiVersion="<%= apiVersion %>"
       retrieveTarget="<%= retrieveTarget %>"
+      <% if(packageNames) { %>
+      packageNames="<%= packageNames %>"
+      <% } else { %>
       unpackaged="<%= unpackaged %>"
+      <% } %>
       unzip="<%= unzip %>">
     </sf:retrieve >
   </target>
