@@ -1,6 +1,9 @@
 <project name="Grunt Salesforce Ant Describe" default="describe" xmlns:sf="antlib:com.salesforce">
 
   <target name="describe">
+    <% if(proxy_http) { %>
+    <setproxy proxyhost="<%= proxy_http %>" proxyport="<%= proxy_port %>"/>
+    <% } %>
     <sf:describeMetadata 
       <% if(sessionid) { %> 
       sessionId="<%= sessionid %>"

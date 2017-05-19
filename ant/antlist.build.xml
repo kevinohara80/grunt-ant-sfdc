@@ -1,6 +1,9 @@
 <project name="Grunt Salesforce Ant List Metadata" default="listmetadata" xmlns:sf="antlib:com.salesforce">
 
   <target name="listmetadata">
+    <% if(proxy_http) { %>
+    <setproxy proxyhost="<%= proxy_http %>" proxyport="<%= proxy_port %>"/>
+    <% } %>
     <sf:listMetadata 
       <% if(sessionid) { %> 
       sessionId="<%= sessionid %>"

@@ -1,6 +1,9 @@
 <project name="Grunt Salesforce Ant Retrieve" default="retrieve" xmlns:sf="antlib:com.salesforce">
 
   <target name="retrieve">
+    <% if(proxy_http) { %>
+    <setproxy proxyhost="<%= proxy_http %>" proxyport="<%= proxy_port %>"/>
+    <% } %>
     <sf:retrieve 
       <% if(sessionid) { %> 
       sessionId="<%= sessionid %>"
