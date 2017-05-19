@@ -194,6 +194,11 @@
     "folder": ["documents","email","reports","dashboards"],
     "allowStar": false
   },
+  "globalvalueset": {
+      "xmlType": "GlobalValueSet",
+      "folder": "globalValueSets",
+      "allowStar": true
+  },
   "group": {
     "xmlType": "Group",
     "folder": "groups",
