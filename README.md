@@ -224,6 +224,10 @@ Type: `Boolean`
 Default value: `false`
 This option will tell the task to assume a package.xml file exists in the `root` folder. If this option is `true` the `pkg` data provided to the task will be ignored and a new package.xml file will not be generated. This allows you to reuse a package.xml file that may be present in your project.
 
+#### options.packageNames
+Type: `String`
+This options will retrieve all components from a package from Salesforce with the same name. If populated, `options.existingPackage` and `pkg` will be ignored. See https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_deploying_ant_retrieveCode.htm
+
 ### Usage Examples
 
 #### Single Org Retrieve
