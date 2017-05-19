@@ -34,7 +34,8 @@ var antdeployOpts = {
   useEnv: false,
   existingPackage: false,
   proxy_http: false,
-  proxy_port: 80
+  proxy_port: 80,
+  testLevel: "RunLocalTests"
 }
 
 function lookupMetadata(key) {

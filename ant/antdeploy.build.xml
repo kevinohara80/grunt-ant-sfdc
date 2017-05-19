@@ -22,6 +22,7 @@
       checkonly="<%= checkOnly %>" 
       runAllTests="<%= runAllTests %>"
       rollbackOnError="<%= rollbackOnError %>"
+      testLevel="<%= testLevel %>"
       ignoreWarnings="<%= ignoreWarnings %>">
       <% _.forEach(tests, function(t) { %><runTest><%= t %></runTest><% }); %>
     </sf:deploy>
