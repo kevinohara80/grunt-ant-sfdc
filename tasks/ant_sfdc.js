@@ -256,16 +256,26 @@ module.exports = function(grunt) {
     var buildFile = grunt.template.process(template, { data: options });
     grunt.file.write(path.join(localTmp,'/ant/build.xml'), buildFile);
 
-    if (!options.existingPackage) {
-      var packageXml = buildPackageXml(this.data.pkg, this.data.pkgName, options.apiVersion);
-      var rootPackagePath = path.join(options.root,'/package.xml');
-      grunt.file.write(rootPackagePath, packageXml);
-      grunt.file.copy(rootPackagePath, path.join(localTmp,'/package.xml'));
+    // If the tasks specifies a pkgName in the options, then use packageNames attribute
+    // instead of unpackaged attribute. This means we do not need to create/have a package.xml
+    if(options.packageNames){
+      if(!grunt.file.exists(options.retrieveTarget)){
+        grunt.log.writeln(options.retrieveTarget, "did not exist. Creating directory.");
+        grunt.file.mkdir(options.retrieveTarget);
+      }
+    // Otherwise, create/find the package.xml
     } else {
-      if(grunt.file.exists(options.root,'/package.xml')){
-        grunt.file.copy(path.join(options.root,'/package.xml'), path.join(localTmp,'/package.xml'));
+      if (!options.existingPackage) {
+        var packageXml = buildPackageXml(this.data.pkg, this.data.pkgName, options.apiVersion);
+        var rootPackagePath = path.join(options.root,'/package.xml');
+        grunt.file.write(rootPackagePath, packageXml);
+        grunt.file.copy(rootPackagePath, path.join(localTmp,'/package.xml'));
       } else {
-        grunt.log.error('No Package.xml file found in ' + options.root);
+        if(grunt.file.exists(options.root,'/package.xml')){
+          grunt.file.copy(path.join(options.root,'/package.xml'), path.join(localTmp,'/package.xml'));
+        } else {
+          grunt.log.error('No Package.xml file found in ' + options.root);
+        }
       }
     }
 
