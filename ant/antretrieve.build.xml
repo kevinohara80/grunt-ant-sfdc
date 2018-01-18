@@ -16,7 +16,7 @@
       pollWaitMillis="<%= pollWaitMillis %>" 
       apiVersion="<%= apiVersion %>"
       retrieveTarget="<%= retrieveTarget %>"
-      <% if(packageNames) { %>
+      <% if (typeof packageNames != 'undefined' && packageNames) { %>
       packageNames="<%= packageNames %>"
       <% } else { %>
       unpackaged="<%= unpackaged %>"
