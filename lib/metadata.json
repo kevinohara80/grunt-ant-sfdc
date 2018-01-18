@@ -129,6 +129,11 @@
     "folder": "weblinks",
     "allowStar": true
   },
+  "custompermission": {
+    "xmlType": "CustomPermission",
+    "folder": "customPermissions",
+    "allowStar": true
+  },
   "customsite": {
     "xmlType": "CustomSite",
     "folder": "sites",
