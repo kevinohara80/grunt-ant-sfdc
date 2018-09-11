@@ -199,6 +199,11 @@
     "folder": "objects",
     "allowStar": true
   },
+  "flexipage": {
+    "xmlType": "FlexiPage",
+    "folder": "flexipages",
+    "allowStar": true
+  },
   "flow": {
     "xmlType": "Flow",
     "folder": "flows",
