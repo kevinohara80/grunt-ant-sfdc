@@ -94,6 +94,11 @@
     "folder": "communities",
     "allowStar": true
   },
+  "contentassets": {
+    "xmlType": "ContentAsset",
+    "folder": "contentassets",
+    "allowStar": true
+  },
   "customapplication": {
     "xmlType": "CustomApplication",
     "folder": "applications",
@@ -197,6 +202,11 @@
   "fieldset": {
     "xmlType": "FieldSet",
     "folder": "objects",
+    "allowStar": true
+  },
+  "flexipage": {
+    "xmlType": "FlexiPage",
+    "folder": "flexipages",
     "allowStar": true
   },
   "flow": {
