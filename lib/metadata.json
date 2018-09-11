@@ -94,6 +94,11 @@
     "folder": "communities",
     "allowStar": true
   },
+  "contentassets": {
+    "xmlType": "ContentAsset",
+    "folder": "contentassets",
+    "allowStar": true
+  },
   "customapplication": {
     "xmlType": "CustomApplication",
     "folder": "applications",
