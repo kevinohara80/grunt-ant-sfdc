@@ -249,6 +249,11 @@
     "folder": "objects",
     "allowStar": false
   },
+  "namedcredential": {
+    "xmlType": "NamedCredential",
+    "folder": "namedCredentials",
+    "allowStar": true
+  },
   "namedfilter": {
     "xmlType": "NamedFilter",
     "folder": "objects",
