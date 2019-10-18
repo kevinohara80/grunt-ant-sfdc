@@ -264,6 +264,11 @@
     "folder": "layouts",
     "allowStar": true
   },
+  "lightningcomponentbundle": {
+    "xmlType": "LightningComponentBundle",
+    "folder": "lwc",
+    "allowStar": true
+  },
   "permissionset": {
     "xmlType": "PermissionSet",
     "folder": "permissionsets",
