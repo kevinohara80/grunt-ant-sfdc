@@ -14,6 +14,11 @@
     "folder": "corsWhitelistOrigins",
     "allowStar": true
   },
+  "csptrustedsites": {
+    "xmlType": "CspTrustedSite",
+    "folder": "cspTrustedSites",
+    "allowStar": true
+  },
   "quickactions": {
     "xmlType": "QuickAction",
     "folder": "quickActions",
